@@ -1,0 +1,94 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace LibOSB.ActionTypes
+{
+    class Move : Actions
+    {
+        /// <summary>
+        /// 访问已存储的Move元素。
+        /// </summary>
+        /// <param name="index">索引。访问第n个Move元素。</param>
+        /// <returns></returns>
+        public Move this[int index]
+        {
+            get { return M[index]; }
+            set { M[index] = value; }
+        }
+        public Move() { }
+
+        public void Remove(int index)
+        {
+            M.Remove(M[index]);
+            starttime_L.RemoveAt(index);
+            endtime_L.RemoveAt(index);
+        }
+
+        public Move(byte easing, int starttime, int endtime,
+         double X1, double Y1, double X2, double Y2, int? i, int? j)
+        {
+            type = "M";
+            this.easing = easing;
+            this.startTime = starttime;
+            this.endTime = endtime;
+            this.x1 = X1;
+            this.x2 = X2;
+            this.y1 = Y1;
+            this.y2 = Y2;
+            indexL = i;
+            indexT = j;
+            BuildParams();
+        }
+        private void BuildParams()
+        {
+            if (x1 == x2 && y1 == y2) @params = x1 + "," + y1;
+            else @params = x1 + "," + y1 + "," + x2 + "," + y2;
+        }
+
+        private List<Move> M = new List<Move>();
+        private double x1, y1, x2, y2;
+
+        /// <summary>
+        /// 获取对应Move元素的首x坐标。
+        /// </summary>
+        public double X1 { get { return x1; } }
+        /// <summary>
+        /// 获取对应Move元素的首y坐标。
+        /// </summary>
+        public double Y1 { get { return y1; } }
+        /// <summary>
+        /// 获取对应Move元素的末x坐标。
+        /// </summary>
+        public double X2 { get { return x2; } }
+        /// <summary>
+        /// 获取对应Move元素的末y坐标。
+        /// </summary>
+        public double Y2 { get { return y2; } }
+        /// <summary>
+        /// 添加一个Move动作。
+        /// </summary>
+        /// <param name="Easing"></param>
+        /// <param name="StartTime">动作的开始时间。</param>
+        /// <param name="EndTime">动作的结束时间。</param>
+        /// <param name="Location_X1">动作的首x坐标</param>
+        /// <param name="Location_Y1">动作的首y坐标<</param>
+        /// <param name="Location_X2">动作的末x坐标<</param>
+        /// <param name="Location_Y2">动作的末y坐标<</param>
+        public void Add(byte Easing, int StartTime, int EndTime,
+         double Location_X1, double Location_Y1,
+         double Location_X2, double Location_Y2)
+        {
+
+            //Console.WriteLine();
+            if (Easing < 0 || Easing > 34) throw new Exception("Unknown Easing.");
+            M.Add(new Move(Easing, StartTime, EndTime, Location_X1, Location_Y1, Location_X2, Location_Y2, indexL, indexT));
+
+            //checkTwoMinMax(StartTime, EndTime);
+
+            starttime_L.Add(StartTime);
+            endtime_L.Add(EndTime);
+        }
+    }
+}

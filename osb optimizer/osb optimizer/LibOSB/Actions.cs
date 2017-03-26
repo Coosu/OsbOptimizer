@@ -1,0 +1,155 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace LibOSB
+{
+    /// <summary>
+    /// Parent class of all actions. Should not be instantiated directly.
+    /// </summary>
+    class Actions
+    {
+        protected StringBuilder sb = new StringBuilder();
+
+        public int? indexL, indexT;
+        protected string kg = " ";
+        protected string @params;
+        protected int? endTime = null;
+        protected byte? easing = null;
+        protected int? startTime = null;
+
+        protected string type;
+
+        public List<int?> starttime_L = new List<int?>();
+        public List<int?> endtime_L = new List<int?>();
+
+        public void MoveEndTime(int index)
+        {
+            endtime_L[index - 1] = endtime_L[index];
+        }
+        public void MoveStartTime(int index)
+        {
+            starttime_L[index - 1] = endtime_L[index - 1];
+        }
+
+        /// <summary>
+        /// Get one action's start time.
+        /// </summary>
+        public int? StartTime { get { return startTime; } set { startTime = value; } }
+        /// <summary>
+        /// Get one action's end time.
+        /// </summary>
+        public int? EndTime { get { return endTime; } set { endTime = value; } }
+        /// <summary>
+        /// Get one action's easing.
+        /// </summary>
+        public byte? Easing { get { return easing; } set { easing = value; } }
+        /// <summary>
+        /// Get one action's end type.
+        /// </summary>
+        public string Type { get { return type; } set { type = value; } }
+
+        public string ToString(int source = 0)
+        {
+            if (source != 0) return base.ToString();
+            sb = new StringBuilder();
+            if (indexL != null)
+                kg = "  ";
+            else if(indexT != null)
+                kg = "  ";
+            else kg = " ";
+            sb.Append(kg);
+            sb.Append(Type);
+            sb.Append(",");
+            sb.Append(Easing);
+            sb.Append(",");
+            sb.Append(StartTime);
+            sb.Append(",");
+
+            if (EndTime > StartTime)
+            {
+                sb.Append(EndTime);
+            }
+            else if (EndTime < StartTime)
+            {
+                //throw new Exception("End time should be bigger than start time, or error will be occurs while playing.");
+            }
+            if (@params != null)
+            {
+                sb.Append(",");
+                sb.Append(@params);
+            }
+            return sb.ToString();
+        }
+       
+
+        /// <summary>
+        /// Get number of one action.
+        /// </summary>
+        public int Count { get { return starttime_L.Count(); } }
+
+        private int? tmpMaxTime;
+        private int? tmpMinTime;
+        public int? TmpMaxTime
+        {
+            get { return tmpMaxTime; }
+            set { tmpMaxTime = value; }
+        }
+        public int? TmpMinTime
+        {
+            get { return tmpMinTime; }
+            set { tmpMinTime = value; }
+        }
+        public void ToNull()
+        {
+            TmpMaxTime = null; TmpMinTime = null;
+        }
+        /// <summary>
+        /// Get max time of one action.
+        /// </summary>
+        public int? MaxTime()
+        {
+            //get
+            {
+                if (TmpMaxTime != null) return TmpMaxTime; //缓存
+
+                if (starttime_L.Count < 1) return null;
+                if (starttime_L.Max() > endtime_L.Max())
+                {
+                    TmpMaxTime = starttime_L.Max();
+                    return starttime_L.Max();
+                }
+                else
+                {
+                    TmpMaxTime = endtime_L.Max();
+                    return endtime_L.Max();
+                }
+            }
+        }
+        /// <summary>
+        /// Get min time of one action.
+        /// </summary>
+        public int? MinTime()
+        {
+            //get
+            {
+                if (TmpMinTime != null) return TmpMinTime; //缓存
+
+                if (starttime_L.Count < 1) return null;
+                if (starttime_L.Min() < endtime_L.Min())
+                {
+                    TmpMinTime = starttime_L.Min();
+                    return starttime_L.Min();
+                }
+                else
+                {
+                    TmpMinTime = endtime_L.Min();
+                    return endtime_L.Min();
+                }
+            }
+        }
+
+
+    }
+}
