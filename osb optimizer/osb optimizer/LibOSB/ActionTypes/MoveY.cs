@@ -7,10 +7,8 @@ namespace LibOSB.ActionTypes
 {
     class MoveY : Actions
     {
-        public MoveY this[int index]
-        {
-            get { return MY[index]; }
-        }
+        public MoveY this[int index] { get => MY[index]; }
+
         public MoveY() { }
         public MoveY(byte easing, int starttime, int endtime,
         double Y1, double Y2, int? i, int? j)
@@ -38,8 +36,8 @@ namespace LibOSB.ActionTypes
         }
         private List<MoveY> MY = new List<MoveY>();
         private double y1, y2;
-        public double Y1 { get { return y1; } }
-        public double Y2 { get { return y2; } }
+        public double Y1 { get => y1; }
+        public double Y2 { get => y2; }
         public void Add(byte Easing, int StartTime, int EndTime,
             double Location_Y1, double Location_Y2)
         {

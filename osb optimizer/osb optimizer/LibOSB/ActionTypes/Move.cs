@@ -12,11 +12,8 @@ namespace LibOSB.ActionTypes
         /// </summary>
         /// <param name="index">索引。访问第n个Move元素。</param>
         /// <returns></returns>
-        public Move this[int index]
-        {
-            get { return M[index]; }
-            set { M[index] = value; }
-        }
+        public Move this[int index] { get => M[index]; set => M[index] = value; }
+
         public Move() { }
 
         public void Remove(int index)
@@ -53,19 +50,19 @@ namespace LibOSB.ActionTypes
         /// <summary>
         /// 获取对应Move元素的首x坐标。
         /// </summary>
-        public double X1 { get { return x1; } }
+        public double X1 { get => x1; }
         /// <summary>
         /// 获取对应Move元素的首y坐标。
         /// </summary>
-        public double Y1 { get { return y1; } }
+        public double Y1 { get => y1; }
         /// <summary>
         /// 获取对应Move元素的末x坐标。
         /// </summary>
-        public double X2 { get { return x2; } }
+        public double X2 { get => x2; }
         /// <summary>
         /// 获取对应Move元素的末y坐标。
         /// </summary>
-        public double Y2 { get { return y2; } }
+        public double Y2 { get => y2; }
         /// <summary>
         /// 添加一个Move动作。
         /// </summary>

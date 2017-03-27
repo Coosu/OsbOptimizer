@@ -9,7 +9,7 @@ namespace LibOSB.ActionTypes
     {
         public Fade this[int index]
         {
-            get { return F[index]; }
+            get => F[index]; 
         }
         public Fade(byte easing, int starttime, int endtime,
          double F1, double F2, int? i, int? j)

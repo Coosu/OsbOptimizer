@@ -60,7 +60,7 @@ namespace LibOSB.ActionTypes
 
         private List<Loop> L = new List<Loop>();
         private int times;
-        public int Times { get { return times; } }
+        public int Times { get => times; }
         public void Add(int StartTime, int Times)
         {
             int Lindex = L.Count;

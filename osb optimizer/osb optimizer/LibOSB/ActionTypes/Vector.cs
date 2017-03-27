@@ -8,10 +8,8 @@ namespace LibOSB.ActionTypes
     class Vector : Actions
     {
 
-        public Vector this[int index]
-        {
-            get { return V[index]; }
-        }
+        public Vector this[int index] { get => V[index]; }
+
         public Vector() { }
         public void Remove(int index)
         {
@@ -44,10 +42,10 @@ namespace LibOSB.ActionTypes
         private List<Vector> V = new List<Vector>();
         private double vx1, vy1, vx2, vy2;
 
-        public double VX1 { get { return vx1; } }
-        public double VY1 { get { return vy1; } }
-        public double VX2 { get { return vx2; } }
-        public double VY2 { get { return vy2; } }
+        public double VX1 { get => vx1; }
+        public double VY1 { get => vy1; }
+        public double VX2 { get => vx2; }
+        public double VY2 { get => vy2; }
 
         public void Add(byte Easing, int StartTime, int EndTime,
          double Vector_X1, double Vector_Y1,

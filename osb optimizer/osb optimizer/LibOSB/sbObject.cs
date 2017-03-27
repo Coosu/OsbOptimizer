@@ -31,34 +31,34 @@ namespace LibOSB
         /// <summary>
         /// 获取物件在源文本的行数。
         /// </summary>
-        public int Line { get { return line; } }
+        public int Line { get => line; }
         /// <summary>
         /// 获取物件的种类。
         /// </summary>
-        public string Type { get { return type; } }
+        public string Type { get => type; }
         /// <summary>
         /// 获取物件的图层。
         /// </summary>
-        public string Layer { get { return layer; } }
+        public string Layer { get => layer; }
         /// <summary>
         /// 获取物件的原点位置。
         /// </summary>
-        public string Origin { get { return origin; } }
+        public string Origin { get => origin; }
         /// <summary>
         /// 获取物件的相对路径。
         /// </summary>
-        public string FilePath { get { return filepath; } }
+        public string FilePath { get => filepath; }
         /// <summary>
         /// 获取物件的默认y坐标。
         /// </summary>
-        public double Y { get { return y; } set { y = value; } }
+        public double Y { get => y; set => y = value; }
         /// <summary>
         /// 获取物件的默认x坐标。
         /// </summary>
-        public double X { get { return x; } set { x = value; } }
-        public string Looptype { get { return looptype; } }
-        public double? Framecount { get { return framecount; } }
-        public double? Framerate { get { return framerate; } }
+        public double X { get => x; set => x = value; }
+        public string Looptype { get => looptype; }
+        public double? Framecount { get => framecount; }
+        public double? Framerate { get => framerate; }
         #endregion
 
         /// <summary>
@@ -68,11 +68,7 @@ namespace LibOSB
         private int? tmpMaxTime;
         private int? tmpMinTime;
         public int? TmpMaxTime { get => tmpMaxTime; set => tmpMaxTime = value; }
-        public int? TmpMinTime
-        {
-            get { return tmpMinTime; }
-            set { tmpMinTime = value; }
-        }
+        public int? TmpMinTime        {           get => tmpMinTime;            set => tmpMinTime = value;         }
 
         protected bool TwoMin
         {
@@ -108,7 +104,7 @@ namespace LibOSB
 
         public int? MaxTime()
         {
-            //get
+            
             {
                 if (tmpMaxTime != null) return tmpMaxTime; //缓存
 
@@ -167,7 +163,7 @@ namespace LibOSB
         /// </summary>
         public int? MinTime()
         {
-            //get
+          
             {
                 if (TmpMinTime != null) return TmpMinTime; //缓存
 

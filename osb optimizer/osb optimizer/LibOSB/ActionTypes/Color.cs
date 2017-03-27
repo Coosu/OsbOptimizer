@@ -7,10 +7,8 @@ namespace LibOSB.ActionTypes
 {
     class Color : Actions
     {
-        public Color this[int index]
-        {
-            get { return C[index]; }
-        }
+        public Color this[int index] { get => C[index]; }
+
         public Color() { }
         public Color(byte easing, int starttime, int endtime,
         byte R1, byte G1, byte B1, byte R2, byte G2, byte B2, int? i, int? j)
@@ -46,12 +44,12 @@ namespace LibOSB.ActionTypes
         private List<Color> C = new List<Color>();
         private byte? r1, g1, b1,
               r2, g2, b2;
-        public byte? G1 { get { return g1; } }
-        public byte? B1 { get { return b1; } }
-        public byte? R2 { get { return r2; } }
-        public byte? G2 { get { return g2; } }
-        public byte? B2 { get { return b2; } }
-        public byte? R1 { get { return r1; } }
+        public byte? G1 { get => g1; }
+        public byte? B1 { get => b1; }
+        public byte? R2 { get => r2; }
+        public byte? G2 { get => g2; }
+        public byte? B2 { get => b2; }
+        public byte? R1 { get => r1; }
 
 
         public void Add(byte Easing, int StartTime, int EndTime,

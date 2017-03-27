@@ -90,17 +90,9 @@ namespace LibOSB
         private string name;
         private string value;
 
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get => name; set => name = value; }
 
-        public string Value
-        {
-            get { return value; }
-            set { this.value = value; }
-        }
+        public string Value { get => value; set => this.value = value; }
 
         public ScriptObject(string name, string value)
         {

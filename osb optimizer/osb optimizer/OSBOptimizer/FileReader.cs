@@ -35,12 +35,12 @@ namespace LibOSB
         static int currentLine = 0;
 
 
-        public static string Before { get { return before; } }
-        public static string After { get { return after; } }
+        public static string Before { get => before; }
+        public static string After { get => after; }
 
-        public static int CurrentObjLine { get { return currentObjLine; } }
+        public static int CurrentObjLine { get => currentObjLine; }
 
-        public static double Progress { get { return progress; } }
+        public static double Progress { get => progress; }
 
         private static void exception(Exception ex = null, string exMessage = null)
         {

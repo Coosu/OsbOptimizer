@@ -7,10 +7,8 @@ namespace LibOSB.ActionTypes
 {
     class MoveX : Actions
     {
-        public MoveX this[int index]
-        {
-            get { return MX[index]; }
-        }
+        public MoveX this[int index] { get => MX[index]; }
+
         public MoveX() { }
         public MoveX(byte easing, int starttime, int endtime,
         double X1, double X2, int? i, int? j)
@@ -39,10 +37,11 @@ namespace LibOSB.ActionTypes
 
         private List<MoveX> MX = new List<MoveX>();
         private double x1, x2;
-        public double X1 { get { return x1; } }
-        public double X2 { get { return x2; } }
+        public double X1 { get => x1; }
+        public double X2 { get => x2; }
+
         public void Add(byte Easing, int StartTime, int EndTime,
-       double Location_X1, double Location_X2)
+        double Location_X1, double Location_X2)
         {
             if (Easing < 0 || Easing > 34) throw new Exception("Unknown Easing.");
             MX.Add(new MoveX(Easing, StartTime, EndTime, Location_X1, Location_X2, indexL, indexT));

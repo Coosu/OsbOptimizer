@@ -63,7 +63,7 @@ namespace LibOSB.ActionTypes
 
         private List<Trigger> T = new List<Trigger>();
         private string triggertype;
-        public string TriggerType { get { return triggertype; } }
+        public string TriggerType { get => triggertype; }
         public void Add(string TriggerType, int StartTime, int EndTime)
         {
             int Lindex = T.Count;

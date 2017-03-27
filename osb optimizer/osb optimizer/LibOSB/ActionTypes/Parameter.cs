@@ -7,10 +7,8 @@ namespace LibOSB.ActionTypes
 {
     class Parameter : Actions
     {
-        public Parameter this[int index]
-        {
-            get { return P[index]; }
-        }
+        public Parameter this[int index] { get => P[index]; }
+
         public Parameter(byte easing, int starttime, int endtime,
          string ptype, int? i, int? j)
         {
@@ -33,7 +31,7 @@ namespace LibOSB.ActionTypes
 
         private List<Parameter> P = new List<Parameter>();
         private string ptype;
-        public string Ptype { get { return ptype; } }
+        public string Ptype { get => ptype; }
         public void Add(byte Easing, int StartTime, int EndTime,
          string PType)
         {

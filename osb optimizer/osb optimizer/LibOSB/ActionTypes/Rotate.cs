@@ -7,10 +7,8 @@ namespace LibOSB.ActionTypes
 {
     class Rotate : Actions
     {
-        public Rotate this[int index]
-        {
-            get { return R[index]; }
-        }
+        public Rotate this[int index] { get => R[index]; }
+
         public Rotate(byte easing, int starttime, int endtime,
          double R1, double R2, int? i, int? j)
         {
@@ -41,8 +39,8 @@ namespace LibOSB.ActionTypes
 
         private List<Rotate> R = new List<Rotate>();
         private double r1, r2;
-        public double R1 { get { return r1; } }
-        public double R2 { get { return r2; } }
+        public double R1 { get => r1; }
+        public double R2 { get => r2; }
         public void Add(byte Easing, int StartTime, int EndTime,
          double Rotate_1, double Rotate_2)
         {

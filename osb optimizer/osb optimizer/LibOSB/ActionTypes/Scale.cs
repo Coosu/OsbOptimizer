@@ -7,10 +7,8 @@ namespace LibOSB.ActionTypes
 {
     class Scale : Actions
     {
-        public Scale this[int index]
-        {
-            get { return S[index]; }
-        }
+        public Scale this[int index] { get => S[index]; }
+
         public Scale(byte easing, int starttime, int endtime,
          double S1, double S2, int? i, int? j)
         {
@@ -41,8 +39,8 @@ namespace LibOSB.ActionTypes
 
         public List<Scale> S = new List<Scale>();
         private double s1, s2;
-        public double S1 { get { return s1; } }
-        public double S2 { get { return s2; } }
+        public double S1 { get => s1; }
+        public double S2 { get => s2; }
 
         public void Add(byte Easing, int StartTime, int EndTime,
          double Scale_1, double Scale_2)
