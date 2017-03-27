@@ -8,7 +8,7 @@ namespace LibOSB
     /// <summary>
     /// Parent class of all actions. Should not be instantiated directly.
     /// </summary>
-    class Actions
+    abstract class Actions
     {
         protected StringBuilder sb = new StringBuilder();
 
@@ -36,19 +36,19 @@ namespace LibOSB
         /// <summary>
         /// Get one action's start time.
         /// </summary>
-        public int? StartTime { get { return startTime; } set { startTime = value; } }
+        public int? StartTime { get => startTime; set => startTime = value; }
         /// <summary>
         /// Get one action's end time.
         /// </summary>
-        public int? EndTime { get { return endTime; } set { endTime = value; } }
+        public int? EndTime { get => endTime; set => endTime = value; }
         /// <summary>
         /// Get one action's easing.
         /// </summary>
-        public byte? Easing { get { return easing; } set { easing = value; } }
+        public byte? Easing { get => easing; set => easing = value; }
         /// <summary>
         /// Get one action's end type.
         /// </summary>
-        public string Type { get { return type; } set { type = value; } }
+        public string Type { get => type; set => type = value; }
 
         public string ToString(int source = 0)
         {
@@ -56,7 +56,7 @@ namespace LibOSB
             sb = new StringBuilder();
             if (indexL != null)
                 kg = "  ";
-            else if(indexT != null)
+            else if (indexT != null)
                 kg = "  ";
             else kg = " ";
             sb.Append(kg);
@@ -82,25 +82,18 @@ namespace LibOSB
             }
             return sb.ToString();
         }
-       
+
 
         /// <summary>
         /// Get number of one action.
         /// </summary>
-        public int Count { get { return starttime_L.Count(); } }
+        public int Count { get => starttime_L.Count(); }
 
         private int? tmpMaxTime;
         private int? tmpMinTime;
-        public int? TmpMaxTime
-        {
-            get { return tmpMaxTime; }
-            set { tmpMaxTime = value; }
-        }
-        public int? TmpMinTime
-        {
-            get { return tmpMinTime; }
-            set { tmpMinTime = value; }
-        }
+        public int? TmpMaxTime { get => tmpMaxTime; set => tmpMaxTime = value; }
+        public int? TmpMinTime { get => tmpMinTime; set => tmpMinTime = value; }
+
         public void ToNull()
         {
             TmpMaxTime = null; TmpMinTime = null;
@@ -110,7 +103,6 @@ namespace LibOSB
         /// </summary>
         public int? MaxTime()
         {
-            //get
             {
                 if (TmpMaxTime != null) return TmpMaxTime; //缓存
 
@@ -132,7 +124,6 @@ namespace LibOSB
         /// </summary>
         public int? MinTime()
         {
-            //get
             {
                 if (TmpMinTime != null) return TmpMinTime; //缓存
 

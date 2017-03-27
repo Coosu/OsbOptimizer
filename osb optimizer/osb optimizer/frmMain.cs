@@ -62,14 +62,7 @@ namespace LibOSB
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (t1 != null && t1.IsAlive == true)
-            {
-                e.Cancel = true;
-                DialogResult ok = MessageBox.Show("Optimization is running, quit?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (ok == DialogResult.No) return;
-                t1.Abort();
-            }
-            e.Cancel = false;
+
         }
         private void timerProgress_Tick(object sender, EventArgs e)
         {
@@ -199,17 +192,27 @@ namespace LibOSB
         string iniroot = Application.StartupPath + @"\config.ini";
         private void WriteSettings()
         {
-            WriteINI("Checkboxes", "ChangeConfirm", chkConfirm.Checked.ToString(), iniroot);
-            WriteINI("Checkboxes", "DeleteConfirm", chkConfirm2.Checked.ToString(), iniroot);
-            WriteINI("TakeDecimal", "Decimal", textBox1.Text, iniroot);
+            WriteINI("RegularSettings", "ChangeConfirm", chkConfirm.Checked.ToString(), iniroot);
+            WriteINI("RegularSettings", "DeleteConfirm", chkConfirm2.Checked.ToString(), iniroot);
+            WriteINI("OptimizationSettings", "Decimal", textBox1.Text, iniroot);
+            WriteINI("RootSetting", "BackupFile", sControls.BackupRoot, iniroot);
+            WriteINI("InfoSetting", "CollectResult", InfoCollector.IfCollectInfo.ToString(), iniroot);
+            WriteINI("InfoSetting", "CollectException", InfoCollector.IfCollectEx.ToString(), iniroot);
         }
         private void GetSettings()
         {
-            chkConfirm.Checked = bool.Parse(GetINI("CheckBoxes", "ChangeConfirm", "False", iniroot));
-            chkConfirm2.Checked = bool.Parse(GetINI("CheckBoxes", "DeleteConfirm", "True", iniroot));
+            chkConfirm.Checked = bool.Parse(GetINI("RegularSettings", "ChangeConfirm", "False", iniroot));
+            chkConfirm2.Checked = bool.Parse(GetINI("RegularSettings", "DeleteConfirm", "True", iniroot));
             Optimizer.ifPause = chkConfirm.Checked;
             Optimizer.ifPause2 = chkConfirm2.Checked;
-            textBox1.Text = GetINI("TakeDecimal", "Decimal", "3", iniroot);
+            chkinfo.Checked = bool.Parse(GetINI("InfoSetting", "CollectResult", "True", iniroot));
+            chkex.Checked = bool.Parse(GetINI("InfoSetting", "CollectException", "True", iniroot));
+            InfoCollector.IfCollectInfo = chkinfo.Checked;
+            InfoCollector.IfCollectEx = chkex.Checked;
+
+
+            textBox1.Text = GetINI("OptimizationSettings", "Decimal", "3", iniroot);
+            sControls.BackupRoot = GetINI("RootSetting", "BackupFile", "", iniroot);
             textBox1_LostFocus(null, null);
         }
 
@@ -220,27 +223,30 @@ namespace LibOSB
             wow.Start();
             try
             {
-                //progressbar.Style = ProgressBarStyle.Marquee;
                 lbl_Line1.Text = "Preparing for optimization, please wait...";
                 long lines = sControls.GetFileLine(root);
                 lbl_Line1.Text = "";
                 sControls.Backup(root);
-                //var a = new System.IO.FileInfo(root);
                 Optimizer.ReadFile(root, lines);
             }
             catch (ThreadAbortException) { }
             catch (System.IO.FileNotFoundException)
             {
+
                 lbl_Line1.Text = "No such file.";
                 @finish_rdy(true);
                 t1.Abort();
             }
             catch (Exception ex)
             {
-                //MessageBox.Show(ex.GetType().ToString());
                 lbl_Line1.Text = ex.Message;
+                if (InfoCollector.IfCollectEx)
+                {
+                    try { InfoCollector.UploadEx(ex); } catch { }
+                }
                 //MessageBox.Show(ex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 //sControls.WriteFile(ex.Message, "Exception.log");
+
                 @finish_rdy(true);
                 progressbar.Value = 0;
                 progress.Text = "0%";
@@ -300,6 +306,11 @@ namespace LibOSB
                 Reporter.ObjectFileRoot = objectroot;
                 richTextBox1.Text = Reporter.ToString(false);
                 richTextBox2.Text = Reporter.ToString(true);
+                lbl_Line1.Text = "Optimization finished.";
+                if (InfoCollector.IfCollectInfo)
+                {
+                    try { InfoCollector.UploadInfo(); } catch { }
+                }
             }
 
             Reporter.Clear();
@@ -350,7 +361,7 @@ namespace LibOSB
 
         double yy = 9;
         double y;
-        double xx = 25;
+        double xx = 26;
         double x;
 
         bool status1 = true, status2 = false;
@@ -424,7 +435,17 @@ namespace LibOSB
 
         private void button6_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (t1 != null && t1.IsAlive == true)
+            {
+                //e.Cancel = true;
+                DialogResult ok = MessageBox.Show("Optimization is running, quit?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (ok == DialogResult.No) return;
+                t1.Abort();
+                //timerclose.Enabled = true;
+                //return;
+            }
+            //e.Cancel = false;
+            timerclose.Enabled = true;
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -434,24 +455,123 @@ namespace LibOSB
 
         private void frmMain_MouseDown(object sender, MouseEventArgs e)
         {
+            if (timerWindowX.Enabled == true) return;
             ReleaseCapture();
             SendMessage(this.Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
         }
 
         private void lblTitle_MouseDown(object sender, MouseEventArgs e)
         {
+            if (timerWindowX.Enabled == true) return;
             ReleaseCapture();
             SendMessage(this.Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
         }
 
+        private void panel2_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (timerWindowX.Enabled == true) return;
+            ReleaseCapture();
+            SendMessage(this.Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
+        }
+
+        private void panelCode_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (timerWindowX.Enabled == true) return;
+            ReleaseCapture();
+            SendMessage(this.Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            var folder = new FolderBrowserDialog();
+            if (sControls.BackupRoot == "")
+                folder.Description = "Current root: <source osb file root>\n\nSelect a new directory...";
+            else folder.Description = "Current root: " + sControls.BackupRoot + "\n\nSelect a new directory...";
+            //folder.ShowDialog();
+            if (folder.ShowDialog() == DialogResult.OK)
+            {
+                sControls.BackupRoot = folder.SelectedPath;
+            }
+            else sControls.BackupRoot = "";
+            WriteSettings();
+        }
+
+        private void button8_MouseHover(object sender, EventArgs e)
+        {
+            string tmproot = sControls.BackupRoot;
+            if (tmproot == "")
+            {
+                label1.Text = "<source osb file root>";
+                return;
+            }
+            if (tmproot.Length > 20)
+                label1.Text = ".." + tmproot.Substring(tmproot.Length - 20, 20);
+            else
+                label1.Text = tmproot;
+        }
+
+        private void button8_MouseLeave(object sender, EventArgs e)
+        {
+            label1.Text = "(Cancel to back to default)";
+        }
+
+        private void timeropen_Tick(object sender, EventArgs e)
+        {
+            Opacity += 0.15;
+            if (Opacity >= 1)
+            {
+                Opacity = 1;
+                timeropen.Enabled = false;
+            }
+        }
+
+        private void frmMain_Shown(object sender, EventArgs e)
+        {
+            timeropen.Enabled = true;
+        }
+
+        private void timerclose_Tick(object sender, EventArgs e)
+        {
+            Opacity -= 0.15;
+            if (Opacity <= 0)
+            {
+                Opacity = 0;
+                timeropen.Enabled = false;
+                this.Close();
+            }
+        }
+
+        private void chkinfo_Click(object sender, EventArgs e)
+        {
+            InfoCollector.IfCollectInfo = chkinfo.Checked;
+            WriteSettings();
+        }
+
+        private void chkex_Click(object sender, EventArgs e)
+        {
+            InfoCollector.IfCollectEx = chkex.Checked;
+            WriteSettings();
+        }
+
         private void ToStatus4()
         {
+            this.Left -= (int)(x / 2);
             this.Width += (int)x;
+            button6.Left += (int)x;
+            button7.Left += (int)x;
+            button9.Left += (int)x;
+            //this.Width = button6.Left + button6.Width + button6.Top;
             x -= 1;
         }
         private void ToStatus3()
         {
+            this.Left += (int)(xx - x) / 2;
             this.Width -= (int)(xx - x);
+            button6.Left -= (int)(xx - x);
+            button7.Left -= (int)(xx - x);
+            button9.Left -= (int)(xx - x);
+            //this.Width = button6.Left + button6.Width + button6.Top;
+
             x += 1;
         }
     }

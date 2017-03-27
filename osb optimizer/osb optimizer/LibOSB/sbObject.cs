@@ -67,11 +67,7 @@ namespace LibOSB
 
         private int? tmpMaxTime;
         private int? tmpMinTime;
-        public int? TmpMaxTime
-        {
-            get { return tmpMaxTime; }
-            set { tmpMaxTime = value; }
-        }
+        public int? TmpMaxTime { get => tmpMaxTime; set => tmpMaxTime = value; }
         public int? TmpMinTime
         {
             get { return tmpMinTime; }

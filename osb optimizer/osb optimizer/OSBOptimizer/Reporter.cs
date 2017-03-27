@@ -17,17 +17,17 @@ namespace LibOSB
 
         private static long sizeBefore, sizeAfter;
 
-        private static int totalUnrecognizedLines;
-        private static int totalSpriteNumber;
-        private static int optimizedSpriteNumber;
+        private static long totalUnrecognizedLines;
+        private static long totalSpriteNumber;
+        private static long optimizedSpriteNumber;
 
         public static ExceptionMessages ExceptionMessages = new ExceptionMessages();
 
         public static long SizeBefore { get => sizeBefore; set => sizeBefore = value; }
         public static long SizeAfter { get => sizeAfter; set => sizeAfter = value; }
-        public static int TotalUnrecognizedLines { get => totalUnrecognizedLines; set => totalUnrecognizedLines = value; }
-        public static int TotalSpriteNumber { get => totalSpriteNumber; set => totalSpriteNumber = value; }
-        public static int OptimizedSpriteNumber { get => optimizedSpriteNumber; set => optimizedSpriteNumber = value; }
+        public static long TotalUnrecognizedLines { get => totalUnrecognizedLines; set => totalUnrecognizedLines = value; }
+        public static long TotalSpriteNumber { get => totalSpriteNumber; set => totalSpriteNumber = value; }
+        public static long OptimizedSpriteNumber { get => optimizedSpriteNumber; set => optimizedSpriteNumber = value; }
         public static DateTime ExecTime { get => execTime; set => execTime = value; }
         public static TimeSpan RealtotalTime { get => realtotalTime; set => realtotalTime = value; }
         public static DateTime EndTime { get => endTime; set => endTime = value; }

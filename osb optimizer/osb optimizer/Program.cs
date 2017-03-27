@@ -14,7 +14,7 @@ namespace LibOSB
         /// </summary>
         [STAThread]
         //[MTAThread]
-          static void Main()
+        static void Main()
         {
             /* To do:
              * 1.预查错

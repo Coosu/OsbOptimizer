@@ -250,3 +250,5 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/osb optimizer/osb optimizer/OSBOptimizer/InfoCollector.cs
+/osb optimizer/osb optimizer/OSBOptimizer/InfoCollector.cs
