@@ -16,7 +16,7 @@ namespace LibOSB
         private bool unusefulObj = false;
         private bool issueObj = false;
 
-        private static bool autooptimize = false;
+        private static bool autooptimize = false; 
         public static bool AutoOptimize { get => autooptimize; set => autooptimize = value; }
 
         private string type;

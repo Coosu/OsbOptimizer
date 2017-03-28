@@ -37,7 +37,7 @@ namespace LibOSB
         {
             root = txtRoot.Text;
             //bool error;
-            @start_rdy(out bool error);
+            @start_rdy(out bool error); 
             if (error) return;
 
             t1 = new Thread(RunOptimizer);

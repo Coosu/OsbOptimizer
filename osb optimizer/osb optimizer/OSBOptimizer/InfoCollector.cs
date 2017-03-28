@@ -12,7 +12,7 @@ namespace LibOSB
     {
         private static bool ifCollectEx;
         private static bool ifCollectInfo;
-
+         
         //static Thread tt;
         private static string DatabaseName = "OSBLib";
         private static string server = "127.0.0.1";

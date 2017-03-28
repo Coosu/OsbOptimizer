@@ -15,7 +15,7 @@ namespace LibOSB
             {
                 int? mx2 = Loop[gg].MaxTime(); //这里有问题
                 int? mi2 = Loop[gg].MinTime(); //这里有问题
-                bool if2min2 = Loop[gg].TwoMin;
+                bool if2min2 = Loop[gg].TwoMin; 
                 bool if2max2 = Loop[gg].TwoMax;
 
                 /* 当 这个M的结束时间要小于obj的最大时间(或者是有两个以上的最大时间，其中包括M的)

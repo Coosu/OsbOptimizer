@@ -349,7 +349,7 @@ namespace LibOSB
                         }
                         else sb.Append(after);
 
-                        while (Pause)
+                        while (Pause) 
                         {
                             System.Threading.Thread.Sleep(10);
                         }

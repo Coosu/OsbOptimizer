@@ -39,7 +39,7 @@ namespace LibOSB.ActionTypes
             endtime_L.RemoveAt(index);
         }
 
-        public List<Fade> F = new List<Fade>();
+        public  List<Fade> F = new List<Fade>();
         private double f1, f2;
         public double F1 { get => f1; }
         public double F2 { get => f2; }

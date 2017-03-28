@@ -13,7 +13,7 @@ namespace LibOSB
             if (Fade.Count > 0) optF(); if (unusefulObj) return;
             if (Scale.Count > 0) optS();
             if (Rotate.Count > 0) optR();
-            if (Vector.Count > 0) optV();
+            if (Vector.Count > 0) optV(); 
             if (Color.Count > 0) optC();
             for (int gg = 0; gg < Loop.Count; gg++)
             {

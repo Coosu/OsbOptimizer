@@ -17,7 +17,7 @@ namespace LibOSB
                 bool if2min2 = Trigger[gg].TwoMin;
                 bool if2max2 = Trigger[gg].TwoMax;
 
-                /* 当 这个M的结束时间要小于obj的最大时间(或者是有两个以上的最大时间，其中包括M的)
+                /* 当 这个M的结束时间要小于obj的最大时间(或者是有两个以上的最大时间，其中包括M的) 
                  * 且 就是一个静止的动作
                  * 且 这个动作与上一个末动作一样     
                  */

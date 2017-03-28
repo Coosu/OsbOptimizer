@@ -63,7 +63,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             for (int i = 1; i < sb.Move.Count; i++)
                 if (sb.Move[i].StartTime < sb.Move[i - 1].EndTime) return false;
-            for (int i = 1; i < sb.Fade.Count; i++)
+            for (int i = 1; i < sb.Fade.Count; i++) 
                 if (sb.Fade[i].StartTime < sb.Fade[i - 1].EndTime) return false;
 
             return true;
