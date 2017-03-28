@@ -11,7 +11,8 @@
     <RootNamespace>OsuStoryboard</RootNamespace>
     <AssemblyName>osb optimizer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
@@ -74,17 +75,18 @@
     <Compile Include="LibOSB\Constants\LoopType.cs" />
     <Compile Include="LibOSB\Constants\Origin.cs" />
     <Compile Include="LibOSB\Constants\Type.cs" />
-    <Compile Include="LibOSB\OptRulesT.cs" />
+    <Compile Include="OSBOptimizer\ChkRules.cs" />
+    <Compile Include="OSBOptimizer\OptRulesT.cs" />
     <Compile Include="OSBOptimizer\Control.cs" />
-    <Compile Include="OSBOptimizer\FileReader.cs" />
+    <Compile Include="OSBOptimizer\Optimizer.cs" />
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="LibOSB\OptRules.cs" />
-    <Compile Include="LibOSB\OptRulesL.cs" />
+    <Compile Include="OSBOptimizer\OptRules.cs" />
+    <Compile Include="OSBOptimizer\OptRulesL.cs" />
     <Compile Include="OSBOptimizer\InfoCollector.cs" />
     <Compile Include="OSBOptimizer\Reporter.cs" />
     <Compile Include="Program.cs" />

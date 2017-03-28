@@ -54,7 +54,7 @@ namespace LibOSB
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if ((Optimizer.ifPause || Optimizer.ifPause2) == true && Optimizer.Before != null
+            if ((Optimizer.ifPause || Optimizer.ifPause2 || Optimizer.ifCheck) && Optimizer.Before != null
                 && before != Optimizer.Before && Optimizer.Display == true)
             {
                 @pause();
@@ -62,7 +62,7 @@ namespace LibOSB
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            WriteSettings();
         }
         private void timerProgress_Tick(object sender, EventArgs e)
         {
@@ -194,8 +194,12 @@ namespace LibOSB
         {
             WriteINI("RegularSettings", "ChangeConfirm", chkConfirm.Checked.ToString(), iniroot);
             WriteINI("RegularSettings", "DeleteConfirm", chkConfirm2.Checked.ToString(), iniroot);
+
             WriteINI("OptimizationSettings", "Decimal", textBox1.Text, iniroot);
+            WriteINI("OptimizationSettings", "CheckBeforeOptimize", chkchk.Checked.ToString(), iniroot);
+
             WriteINI("RootSetting", "BackupFile", sControls.BackupRoot, iniroot);
+
             WriteINI("InfoSetting", "CollectResult", InfoCollector.IfCollectInfo.ToString(), iniroot);
             WriteINI("InfoSetting", "CollectException", InfoCollector.IfCollectEx.ToString(), iniroot);
         }
@@ -205,13 +209,17 @@ namespace LibOSB
             chkConfirm2.Checked = bool.Parse(GetINI("RegularSettings", "DeleteConfirm", "True", iniroot));
             Optimizer.ifPause = chkConfirm.Checked;
             Optimizer.ifPause2 = chkConfirm2.Checked;
+
+            textBox1.Text = GetINI("OptimizationSettings", "Decimal", "3", iniroot);
+            chkchk.Checked = bool.Parse(GetINI("OptimizationSettings", "CheckBeforeOptimize", "True", iniroot));
+            Optimizer.ifCheck = chkchk.Checked;
+
             chkinfo.Checked = bool.Parse(GetINI("InfoSetting", "CollectResult", "True", iniroot));
             chkex.Checked = bool.Parse(GetINI("InfoSetting", "CollectException", "True", iniroot));
             InfoCollector.IfCollectInfo = chkinfo.Checked;
             InfoCollector.IfCollectEx = chkex.Checked;
 
 
-            textBox1.Text = GetINI("OptimizationSettings", "Decimal", "3", iniroot);
             sControls.BackupRoot = GetINI("RootSetting", "BackupFile", "", iniroot);
             textBox1_LostFocus(null, null);
         }
@@ -330,6 +338,8 @@ namespace LibOSB
             button3.Enabled = false;
             lbl_Line1.Text = "";
 
+            before = "";after = "";
+
             wow.Start();
             Optimizer.Pause = false;
         }
@@ -347,10 +357,13 @@ namespace LibOSB
             else richTextBox1.Text = before;
             if (after.Length > 10000) richTextBox2.Text = @"/* Too Long to display. */";
             else if (after == "") richTextBox2.Text = @"/* Unuseful object. Deleted. */";
-            else richTextBox2.Text = after;
-            int gg = richTextBox1.Lines.Length - richTextBox2.Lines.Length;
-            if (after != "")
+            else if (after == "IsError") richTextBox2.Text = "/* Exist illogical, conflicting or obsolete commands. */\r\n/* Skip this object. */";
+            else
+            {
+                richTextBox2.Text = after;
+                int gg = richTextBox1.Lines.Length - richTextBox2.Lines.Length;
                 for (int i = 1; i <= gg; i++) richTextBox2.Text += "{" + i + "}\r\n";
+            }
             button2.Enabled = true;
             button3.Enabled = true;
             button2.Focus();
@@ -551,6 +564,22 @@ namespace LibOSB
         {
             InfoCollector.IfCollectEx = chkex.Checked;
             WriteSettings();
+        }
+
+        private void chkinfo_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkchk_Click(object sender, EventArgs e)
+        {
+            Optimizer.ifCheck = chkchk.Checked;
+            WriteSettings();
+        }
+
+        private void chkchk_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void ToStatus4()

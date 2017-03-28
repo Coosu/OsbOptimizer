@@ -14,6 +14,7 @@ namespace LibOSB
         StringBuilder sb = new StringBuilder();
 
         private bool unusefulObj = false;
+        private bool issueObj = false;
 
         private static bool autooptimize = false;
         public static bool AutoOptimize { get => autooptimize; set => autooptimize = value; }
@@ -68,7 +69,7 @@ namespace LibOSB
         private int? tmpMaxTime;
         private int? tmpMinTime;
         public int? TmpMaxTime { get => tmpMaxTime; set => tmpMaxTime = value; }
-        public int? TmpMinTime        {           get => tmpMinTime;            set => tmpMinTime = value;         }
+        public int? TmpMinTime { get => tmpMinTime; set => tmpMinTime = value; }
 
         protected bool TwoMin
         {
@@ -104,7 +105,7 @@ namespace LibOSB
 
         public int? MaxTime()
         {
-            
+
             {
                 if (tmpMaxTime != null) return tmpMaxTime; //缓存
 
@@ -163,7 +164,7 @@ namespace LibOSB
         /// </summary>
         public int? MinTime()
         {
-          
+
             {
                 if (TmpMinTime != null) return TmpMinTime; //缓存
 
@@ -378,7 +379,9 @@ namespace LibOSB
         public Loop Loop { set; get; }
         public Trigger Trigger { set; get; }
 
-        public bool UnusefulObj { get { return unusefulObj; } }
+        public bool UnusefulObj { get => unusefulObj; }
+
+        public bool IssueObj { get => issueObj; set => issueObj = value; }
     }
 
 }

@@ -9,7 +9,7 @@ namespace LibOSB.ActionTypes
     {
         public Fade this[int index]
         {
-            get => F[index]; 
+            get => F[index];
         }
         public Fade(byte easing, int starttime, int endtime,
          double F1, double F2, int? i, int? j)
@@ -39,7 +39,7 @@ namespace LibOSB.ActionTypes
             endtime_L.RemoveAt(index);
         }
 
-        private List<Fade> F = new List<Fade>();
+        public List<Fade> F = new List<Fade>();
         private double f1, f2;
         public double F1 { get => f1; }
         public double F2 { get => f2; }

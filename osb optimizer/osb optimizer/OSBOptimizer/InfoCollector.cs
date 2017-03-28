@@ -34,7 +34,7 @@ namespace LibOSB
             SqlConnection.Open();
 
             MySqlTransaction Transaction = SqlConnection.BeginTransaction();
-            
+
             string cmd = string.Format("insert into `ExInfo` values ('{0}','{1}','{2}','{3}')", ex.GetType(), ex.ToString(), getMacAddress(), ex.GetType() + ex.StackTrace);
 
             MySqlCommand Command = new MySqlCommand(cmd, SqlConnection, Transaction);

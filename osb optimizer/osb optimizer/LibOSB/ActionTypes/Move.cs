@@ -44,7 +44,7 @@ namespace LibOSB.ActionTypes
             else @params = x1 + "," + y1 + "," + x2 + "," + y2;
         }
 
-        private List<Move> M = new List<Move>();
+        public List<Move> M = new List<Move>();
         private double x1, y1, x2, y2;
 
         /// <summary>

@@ -57,7 +57,7 @@
             this.button8 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkchk = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.timerWindow = new System.Windows.Forms.Timer(this.components);
             this.timerWindowX = new System.Windows.Forms.Timer(this.components);
@@ -138,8 +138,7 @@
             this.txtRoot.Name = "txtRoot";
             this.txtRoot.Size = new System.Drawing.Size(279, 23);
             this.txtRoot.TabIndex = 7;
-            this.txtRoot.Text = "D:\\Program Files (x86)\\osu!\\Songs\\463479 Camellia feat Nanahira - Bassdrop freaks" +
-    " (Long Ver)\\Nanahira - Bassdrop Freaks (Long Ver.) (yf_bmp).bak";
+            this.txtRoot.Text = "D:\\a.bak";
             // 
             // lbl_Line1
             // 
@@ -338,6 +337,7 @@
             this.chkinfo.TabIndex = 21;
             this.chkinfo.Text = "Send each result to server for better experience";
             this.chkinfo.UseVisualStyleBackColor = true;
+            this.chkinfo.CheckedChanged += new System.EventHandler(this.chkinfo_CheckedChanged);
             this.chkinfo.Click += new System.EventHandler(this.chkinfo_Click);
             // 
             // chkex
@@ -397,7 +397,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.checkBox2);
-            this.groupBox2.Controls.Add(this.checkBox1);
+            this.groupBox2.Controls.Add(this.chkchk);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBox1);
             this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -423,18 +423,21 @@
             this.checkBox2.Text = "Depth optimization (Will take longer time)";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // chkchk
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Enabled = false;
-            this.checkBox1.Font = new System.Drawing.Font("微软雅黑 Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox1.ForeColor = System.Drawing.Color.Silver;
-            this.checkBox1.Location = new System.Drawing.Point(9, 51);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(301, 21);
-            this.checkBox1.TabIndex = 16;
-            this.checkBox1.Text = "Check event legitimacy before each optimization";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkchk.AutoSize = true;
+            this.chkchk.Checked = true;
+            this.chkchk.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkchk.Font = new System.Drawing.Font("微软雅黑 Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.chkchk.ForeColor = System.Drawing.Color.Silver;
+            this.chkchk.Location = new System.Drawing.Point(9, 51);
+            this.chkchk.Name = "chkchk";
+            this.chkchk.Size = new System.Drawing.Size(301, 21);
+            this.chkchk.TabIndex = 16;
+            this.chkchk.Text = "Check event legitimacy before each optimization";
+            this.chkchk.UseVisualStyleBackColor = true;
+            this.chkchk.CheckedChanged += new System.EventHandler(this.chkchk_CheckedChanged);
+            this.chkchk.Click += new System.EventHandler(this.chkchk_Click);
             // 
             // groupBox1
             // 
@@ -546,7 +549,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.ClientSize = new System.Drawing.Size(400, 409);
+            this.ClientSize = new System.Drawing.Size(813, 409);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.button7);
@@ -614,7 +617,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkchk;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button8;

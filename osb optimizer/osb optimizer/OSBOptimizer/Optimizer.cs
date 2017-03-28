@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using LibOSB;
+using OsuStoryboard.OSBOptimizer;
 
 namespace LibOSB
 {
@@ -13,6 +14,7 @@ namespace LibOSB
         public static int Decimal;
         public static bool ifPause = false;
         public static bool ifPause2 = true;
+        public static bool ifCheck = true;
 
         private static long totalline = 0;
         private static double progress;
@@ -134,7 +136,7 @@ namespace LibOSB
                             scriptSB.Clear();
                         }
                     }
-                    else if (ifinpart == true)
+                    else if (ifinpart)
                     {
 
                         if (ind_l == -1)
@@ -300,42 +302,14 @@ namespace LibOSB
             {
                 currentObjLine = obj.Line;
                 Reporter.TotalSpriteNumber++;
-
-                //Debug.WriteLine(currentObjLine);
+                bool IsOK = ChkRules.Check(obj);
                 before = obj.ToString();
-                obj.Optimize();
-                after = obj.ToString();
-                //ifPause2 = obj.UnusefulObj;
-                if (ifPause) //如果开了确认
+
+                if (ifCheck && !IsOK)
                 {
-                    //ifPause = true;
-                    if (before != after)
-                    {
-                        Pause = true; Display = true;
-                    }
-                    else sb.Append(after);
-
-                    while (Pause == true)
-                    {
-                        System.Threading.Thread.Sleep(10);
-                    }
-                    Display = false;
-                }
-
-                else if (ifPause2)
-                {
-                    if (before != after && after != "")
-                    {
-                        sb.Append(after);
-                        Reporter.OptimizedSpriteNumber++;
-                    }
-                    else if (after == "")
-                    {
-                        Pause = true; Display = true;
-                    }
-                    else sb.Append(after);
-
-                    while (Pause == true)
+                    after = "IsError";
+                    Pause = true; Display = true;
+                    while (Pause)
                     {
                         System.Threading.Thread.Sleep(10);
                     }
@@ -343,10 +317,51 @@ namespace LibOSB
                 }
                 else
                 {
-                    sb.Append(after);
-                    if (before != after) Reporter.OptimizedSpriteNumber++;
-                }
+                    obj.Optimize();
+                    after = obj.ToString();
+                    //ifPause2 = obj.UnusefulObj;
+                    if (ifPause) //如果开了确认
+                    {
+                        //ifPause = true;
+                        if (before != after)
+                        {
+                            Pause = true; Display = true;
+                        }
+                        else sb.Append(after);
 
+                        while (Pause)
+                        {
+                            System.Threading.Thread.Sleep(10);
+                        }
+                        Display = false;
+                    }
+
+                    else if (ifPause2)
+                    {
+                        if (before != after && after != "")
+                        {
+                            sb.Append(after);
+                            Reporter.OptimizedSpriteNumber++;
+                        }
+                        else if (after == "")
+                        {
+                            Pause = true; Display = true;
+                        }
+                        else sb.Append(after);
+
+                        while (Pause)
+                        {
+                            System.Threading.Thread.Sleep(10);
+                        }
+                        Display = false;
+                    }
+                    else
+                    {
+                        sb.Append(after);
+                        if (before != after) Reporter.OptimizedSpriteNumber++;
+                    }
+                }
+                before = ""; after = "";
                 //Console.WriteLine(obj.ToString());
                 obj = null;
 
