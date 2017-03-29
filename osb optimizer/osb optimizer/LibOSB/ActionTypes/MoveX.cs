@@ -35,7 +35,7 @@ namespace LibOSB.ActionTypes
             else @params = x1.ToString();
         }
 
-        private List<MoveX> MX = new List<MoveX>();
+        public List<MoveX> MX = new List<MoveX>();
         private double x1, x2;
         public double X1 { get => x1; }
         public double X2 { get => x2; }

@@ -39,7 +39,7 @@ namespace LibOSB.ActionTypes
             else @params = vx1 + "," + vy1 + "," + vx2 + "," + vy2;
         }
 
-        private List<Vector> V = new List<Vector>();
+        public List<Vector> V = new List<Vector>();
         private double vx1, vy1, vx2, vy2;
 
         public double VX1 { get => vx1; }

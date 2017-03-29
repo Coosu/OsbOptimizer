@@ -34,7 +34,7 @@ namespace LibOSB.ActionTypes
             if (y1 != y2) @params = y1 + "," + y2;
             else @params = y1.ToString();
         }
-        private List<MoveY> MY = new List<MoveY>();
+        public List<MoveY> MY = new List<MoveY>();
         private double y1, y2;
         public double Y1 { get => y1; }
         public double Y2 { get => y2; }

@@ -37,7 +37,7 @@ namespace LibOSB.ActionTypes
             endtime_L.RemoveAt(index);
         }
 
-        private List<Rotate> R = new List<Rotate>();
+        public List<Rotate> R = new List<Rotate>();
         private double r1, r2;
         public double R1 { get => r1; }
         public double R2 { get => r2; }

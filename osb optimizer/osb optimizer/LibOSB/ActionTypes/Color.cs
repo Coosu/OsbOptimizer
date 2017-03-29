@@ -41,7 +41,7 @@ namespace LibOSB.ActionTypes
             endtime_L.RemoveAt(index);
         }
 
-        private List<Color> C = new List<Color>();
+        public List<Color> C = new List<Color>();
         private byte? r1, g1, b1,
               r2, g2, b2;
         public byte? G1 { get => g1; }
