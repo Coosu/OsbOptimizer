@@ -9,7 +9,7 @@ namespace OsuStoryboard.OSBOptimizer
 {
     static class ChkRules
     {
-        private static void chkM(sbObject sb)
+        private static void ChkM(SBObject sb)
         {
             int?[] start, end;
 
@@ -32,7 +32,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             }
         }
-        private static void chkF(sbObject sb)
+        private static void ChkF(SBObject sb)
         {
             int?[] start, end;
 
@@ -55,7 +55,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             }
         }
-        private static void chkS(sbObject sb)
+        private static void ChkS(SBObject sb)
         {
             int?[] start, end;
 
@@ -78,7 +78,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             }
         }
-        private static void chkR(sbObject sb)
+        private static void ChkR(SBObject sb)
         {
             int?[] start, end;
 
@@ -101,7 +101,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             }
         }
-        private static void chkC(sbObject sb)
+        private static void ChkC(SBObject sb)
         {
             int?[] start, end;
 
@@ -124,7 +124,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             }
         }
-        private static void chkMX(sbObject sb)
+        private static void ChkMX(SBObject sb)
         {
             int?[] start, end;
 
@@ -147,7 +147,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             }
         }
-        private static void chkMY(sbObject sb)
+        private static void ChkMY(SBObject sb)
         {
             int?[] start, end;
 
@@ -170,7 +170,7 @@ namespace OsuStoryboard.OSBOptimizer
 
             }
         }
-        private static void chkV(sbObject sb)
+        private static void ChkV(SBObject sb)
         {
             int?[] start, end;
 
@@ -194,27 +194,43 @@ namespace OsuStoryboard.OSBOptimizer
             }
         }
 
-        public static bool Check(sbObject sb)
+        public static bool Check(SBObject sb)
         {
-            chkM(sb); chkF(sb); chkS(sb); chkR(sb);
-            chkC(sb); chkMX(sb); chkMY(sb); chkV(sb);
+            ChkM(sb); ChkF(sb); ChkS(sb); ChkR(sb);
+            ChkC(sb); ChkMX(sb); ChkMY(sb); ChkV(sb);
 
             for (int i = 1; i < sb.Move.Count; i++)
-                if (sb.Move[i].StartTime < sb.Move[i - 1].EndTime) return false;
+                if (sb.Move[i].StartTime < sb.Move[i - 1].EndTime ||
+                    sb.Move[i].StartTime == sb.Move[i - 1].StartTime && sb.Move[i].EndTime == sb.Move[i - 1].EndTime &&
+                    sb.Move[i].StartTime == sb.Move[i].EndTime) return false;
             for (int i = 1; i < sb.Fade.Count; i++)
-                if (sb.Fade[i].StartTime < sb.Fade[i - 1].EndTime) return false;
+                if (sb.Fade[i].StartTime < sb.Fade[i - 1].EndTime ||
+                    sb.Fade[i].StartTime == sb.Fade[i - 1].StartTime && sb.Fade[i].EndTime == sb.Fade[i - 1].EndTime &&
+                    sb.Fade[i].StartTime == sb.Fade[i].EndTime) return false;
             for (int i = 1; i < sb.Scale.Count; i++)
-                if (sb.Scale[i].StartTime < sb.Scale[i - 1].EndTime) return false;
+                if (sb.Scale[i].StartTime < sb.Scale[i - 1].EndTime ||
+                    sb.Scale[i].StartTime == sb.Scale[i - 1].StartTime && sb.Scale[i].EndTime == sb.Scale[i - 1].EndTime &&
+                    sb.Scale[i].StartTime == sb.Scale[i].EndTime) return false;
             for (int i = 1; i < sb.Rotate.Count; i++)
-                if (sb.Rotate[i].StartTime < sb.Rotate[i - 1].EndTime) return false;
+                if (sb.Rotate[i].StartTime < sb.Rotate[i - 1].EndTime ||
+                    sb.Rotate[i].StartTime == sb.Rotate[i - 1].StartTime && sb.Rotate[i].EndTime == sb.Rotate[i - 1].EndTime &&
+                    sb.Rotate[i].StartTime == sb.Rotate[i].EndTime) return false;
             for (int i = 1; i < sb.Color.Count; i++)
-                if (sb.Color[i].StartTime < sb.Color[i - 1].EndTime) return false;
+                if (sb.Color[i].StartTime < sb.Color[i - 1].EndTime ||
+                    sb.Color[i].StartTime == sb.Color[i - 1].StartTime && sb.Color[i].EndTime == sb.Color[i - 1].EndTime &&
+                    sb.Color[i].StartTime == sb.Color[i].EndTime) return false;
             for (int i = 1; i < sb.MoveX.Count; i++)
-                if (sb.MoveX[i].StartTime < sb.MoveX[i - 1].EndTime) return false;
+                if (sb.MoveX[i].StartTime < sb.MoveX[i - 1].EndTime ||
+                    sb.MoveX[i].StartTime == sb.MoveX[i - 1].StartTime && sb.MoveX[i].EndTime == sb.MoveX[i - 1].EndTime &&
+                    sb.MoveX[i].StartTime == sb.MoveX[i].EndTime) return false;
             for (int i = 1; i < sb.MoveY.Count; i++)
-                if (sb.MoveY[i].StartTime < sb.MoveY[i - 1].EndTime) return false;
+                if (sb.MoveY[i].StartTime < sb.MoveY[i - 1].EndTime ||
+                    sb.MoveY[i].StartTime == sb.MoveY[i - 1].StartTime && sb.MoveY[i].EndTime == sb.MoveY[i - 1].EndTime &&
+                    sb.MoveY[i].StartTime == sb.MoveY[i].EndTime) return false;
             for (int i = 1; i < sb.Vector.Count; i++)
-                if (sb.Vector[i].StartTime < sb.Vector[i - 1].EndTime) return false;
+                if (sb.Vector[i].StartTime < sb.Vector[i - 1].EndTime ||
+                    sb.Vector[i].StartTime == sb.Vector[i - 1].StartTime && sb.Vector[i].EndTime == sb.Vector[i - 1].EndTime &&
+                    sb.Vector[i].StartTime == sb.Vector[i].EndTime) return false;
 
             return true;
         }

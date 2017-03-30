@@ -9,7 +9,7 @@ namespace LibOSB
     /// <summary>
     /// Base class of storyboard objects.
     /// </summary>
-    partial class sbObject
+    partial class SBObject
     {
         StringBuilder sb = new StringBuilder();
 
@@ -274,7 +274,7 @@ namespace LibOSB
         /// <summary>
         /// 创建一个Storyboard物件的实例。
         /// </summary>
-        public sbObject(string Type, string Layer, string Origin, string FilePath, double X, double Y, int line)
+        public SBObject(string Type, string Layer, string Origin, string FilePath, double X, double Y, int line)
         {
             if (Type != "Sprite" && Type != "Animation")
                 throw new Exception("Unknown object type.");
@@ -309,7 +309,7 @@ namespace LibOSB
             Loop = new Loop();
             Trigger = new Trigger();
         }
-        public sbObject(string Type, string Layer, string Origin, string FilePath, double X, double Y, double FrameCount, double FrameRate, string LoopType, int line)
+        public SBObject(string Type, string Layer, string Origin, string FilePath, double X, double Y, double FrameCount, double FrameRate, string LoopType, int line)
         {
             if (Type != "Sprite" && Type != "Animation")
                 throw new Exception("Unknown object type.");

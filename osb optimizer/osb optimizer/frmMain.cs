@@ -37,7 +37,7 @@ namespace LibOSB
         {
             root = txtRoot.Text;
             //bool error;
-            @start_rdy(out bool error); 
+            @start_rdy(out bool error);
             if (error) return;
 
             t1 = new Thread(RunOptimizer);
@@ -45,7 +45,9 @@ namespace LibOSB
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            Optimizer.sb.Append(after);
+            if (after != "IsError")
+                Optimizer.sb.Append(after);
+            else Optimizer.sb.Append(before);
             Reporter.OptimizedSpriteNumber++;
             @continue_rdy();
             //status1 = false;
@@ -81,7 +83,7 @@ namespace LibOSB
                     objectroot = root;
                 else
                     objectroot = System.IO.Path.GetDirectoryName(root) + @"\" + System.IO.Path.GetFileNameWithoutExtension(root) + ".osb";
-                sControls.WriteFile(Optimizer.sb.ToString(), objectroot);
+                SControl.WriteFile(Optimizer.sb.ToString(), objectroot);
                 Optimizer.Finsh = false;
                 @finish_rdy(false);
                 return;
@@ -194,11 +196,13 @@ namespace LibOSB
         {
             WriteINI("RegularSettings", "ChangeConfirm", chkConfirm.Checked.ToString(), iniroot);
             WriteINI("RegularSettings", "DeleteConfirm", chkConfirm2.Checked.ToString(), iniroot);
+            WriteINI("RegularSettings", "ConflictConfirm", chkConfirm3.Checked.ToString(), iniroot);
 
             WriteINI("OptimizationSettings", "Decimal", textBox1.Text, iniroot);
             WriteINI("OptimizationSettings", "CheckBeforeOptimize", chkchk.Checked.ToString(), iniroot);
+            WriteINI("OptimizationSettings", "DeepOptimization", chkDeep.Checked.ToString(), iniroot);
 
-            WriteINI("RootSetting", "BackupFile", sControls.BackupRoot, iniroot);
+            WriteINI("RootSetting", "BackupFile", SControl.BackupRoot, iniroot);
 
             WriteINI("InfoSetting", "CollectResult", InfoCollector.IfCollectInfo.ToString(), iniroot);
             WriteINI("InfoSetting", "CollectException", InfoCollector.IfCollectEx.ToString(), iniroot);
@@ -207,12 +211,16 @@ namespace LibOSB
         {
             chkConfirm.Checked = bool.Parse(GetINI("RegularSettings", "ChangeConfirm", "False", iniroot));
             chkConfirm2.Checked = bool.Parse(GetINI("RegularSettings", "DeleteConfirm", "True", iniroot));
+            chkConfirm3.Checked = bool.Parse(GetINI("RegularSettings", "ConflictConfirm", "True", iniroot));
             Optimizer.ifPause = chkConfirm.Checked;
             Optimizer.ifPause2 = chkConfirm2.Checked;
+            Optimizer.ifPause3 = chkConfirm3.Checked;
 
             textBox1.Text = GetINI("OptimizationSettings", "Decimal", "3", iniroot);
             chkchk.Checked = bool.Parse(GetINI("OptimizationSettings", "CheckBeforeOptimize", "True", iniroot));
+            chkDeep.Checked = bool.Parse(GetINI("OptimizationSettings", "DeepOptimization", "True", iniroot));
             Optimizer.ifCheck = chkchk.Checked;
+            SBObject.IfDeep = chkDeep.Checked;
 
             chkinfo.Checked = bool.Parse(GetINI("InfoSetting", "CollectResult", "True", iniroot));
             chkex.Checked = bool.Parse(GetINI("InfoSetting", "CollectException", "True", iniroot));
@@ -220,7 +228,7 @@ namespace LibOSB
             InfoCollector.IfCollectEx = chkex.Checked;
 
 
-            sControls.BackupRoot = GetINI("RootSetting", "BackupFile", "", iniroot);
+            SControl.BackupRoot = GetINI("RootSetting", "BackupFile", "", iniroot);
             textBox1_LostFocus(null, null);
         }
 
@@ -232,9 +240,9 @@ namespace LibOSB
             try
             {
                 lbl_Line1.Text = "Preparing for optimization, please wait...";
-                long lines = sControls.GetFileLine(root);
+                long lines = SControl.GetFileLine(root);
                 lbl_Line1.Text = "";
-                sControls.Backup(root);
+                SControl.Backup(root);
                 Optimizer.ReadFile(root, lines);
             }
             catch (ThreadAbortException) { }
@@ -313,6 +321,7 @@ namespace LibOSB
                 Reporter.SizeAfter = new System.IO.FileInfo(objectroot).Length;
                 Reporter.ObjectFileRoot = objectroot;
                 richTextBox1.Text = Reporter.ToString(false);
+                richTextBox2.ForeColor = Color.FromArgb(255, 224, 224, 224);
                 richTextBox2.Text = Reporter.ToString(true);
                 lbl_Line1.Text = "Optimization finished.";
                 if (InfoCollector.IfCollectInfo)
@@ -338,7 +347,7 @@ namespace LibOSB
             button3.Enabled = false;
             lbl_Line1.Text = "";
 
-            before = "";after = "";
+            before = ""; after = "";
 
             wow.Start();
             Optimizer.Pause = false;
@@ -353,13 +362,26 @@ namespace LibOSB
             richTextBox1.ScrollBars = ScrollBars.Vertical;
             richTextBox2.ScrollBars = ScrollBars.Vertical;
 
-            if (before.Length > 10000) richTextBox1.Text = @"/* Too Long to display. */";
+            if (before.Length > 10000) richTextBox1.Text = @"// Too Long to display.";
             else richTextBox1.Text = before;
-            if (after.Length > 10000) richTextBox2.Text = @"/* Too Long to display. */";
-            else if (after == "") richTextBox2.Text = @"/* Unuseful object. Deleted. */";
-            else if (after == "IsError") richTextBox2.Text = "/* Exist illogical, conflicting or obsolete commands. */\r\n/* Skip this object. */";
+            if (after.Length > 10000)
+            {
+                richTextBox2.ForeColor = Color.FromArgb(255, 224, 224, 224);
+                richTextBox2.Text = @"// Too Long to display.";
+            }
+            else if (after == "")
+            {
+                richTextBox2.ForeColor = Color.FromArgb(255, 255, 255, 200);
+                richTextBox2.Text = @"// Unuseful object. Deleted.";
+            }
+            else if (after == "IsError")
+            {
+                richTextBox2.ForeColor = Color.FromArgb(255, 255, 200, 200);
+                richTextBox2.Text = "// Exist illogical, conflicting or obsolete commands.\r\n// Skip this object.";
+            }
             else
             {
+                richTextBox2.ForeColor = Color.FromArgb(255, 224, 224, 224);
                 richTextBox2.Text = after;
                 int gg = richTextBox1.Lines.Length - richTextBox2.Lines.Length;
                 for (int i = 1; i <= gg; i++) richTextBox2.Text += "{" + i + "}\r\n";
@@ -497,21 +519,21 @@ namespace LibOSB
         private void button8_Click(object sender, EventArgs e)
         {
             var folder = new FolderBrowserDialog();
-            if (sControls.BackupRoot == "")
+            if (SControl.BackupRoot == "")
                 folder.Description = "Current root: <source osb file root>\n\nSelect a new directory...";
-            else folder.Description = "Current root: " + sControls.BackupRoot + "\n\nSelect a new directory...";
+            else folder.Description = "Current root: " + SControl.BackupRoot + "\n\nSelect a new directory...";
             //folder.ShowDialog();
             if (folder.ShowDialog() == DialogResult.OK)
             {
-                sControls.BackupRoot = folder.SelectedPath;
+                SControl.BackupRoot = folder.SelectedPath;
             }
-            else sControls.BackupRoot = "";
+            else SControl.BackupRoot = "";
             WriteSettings();
         }
 
         private void button8_MouseHover(object sender, EventArgs e)
         {
-            string tmproot = sControls.BackupRoot;
+            string tmproot = SControl.BackupRoot;
             if (tmproot == "")
             {
                 label1.Text = "<source osb file root>";
@@ -573,13 +595,39 @@ namespace LibOSB
 
         private void chkchk_Click(object sender, EventArgs e)
         {
-            Optimizer.ifCheck = chkchk.Checked;
-            WriteSettings();
+             WriteSettings();
         }
 
         private void chkchk_CheckedChanged(object sender, EventArgs e)
         {
+            Optimizer.ifCheck = chkchk.Checked;
+            chkDeep.Enabled = chkchk.Checked;
+            chkConfirm3.Enabled = chkchk.Checked;
+            if (chkchk.Checked == false)
+            {
+                chkDeep.Checked = false;
+                chkConfirm3.Checked = false;
+            }
+        }
 
+        private void chkConfirm3_CheckedChanged(object sender, EventArgs e)
+        {
+            Optimizer.ifPause3 = chkConfirm3.Checked;
+        }
+
+        private void chkConfirm3_Click(object sender, EventArgs e)
+        {
+            WriteSettings();
+        }
+
+        private void chkDeep_CheckedChanged(object sender, EventArgs e)
+        {
+            SBObject.IfDeep = chkDeep.Checked;
+        }
+
+        private void chkDeep_Click(object sender, EventArgs e)
+        {
+            WriteSettings();
         }
 
         private void ToStatus4()

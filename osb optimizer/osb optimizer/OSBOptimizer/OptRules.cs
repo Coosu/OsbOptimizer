@@ -5,16 +5,22 @@ using System.Text;
 
 namespace LibOSB
 {
-    partial class sbObject
+    partial class SBObject
     {
+        private static bool ifDeep = true;
+
+        public static bool IfDeep { get => ifDeep; set => ifDeep = value; }
+
         public void Optimize()
         {
-            if (Move.Count > 0) optM();
             if (Fade.Count > 0) optF(); if (unusefulObj) return;
+            if (Move.Count > 0) optM();
             if (Scale.Count > 0) optS();
             if (Rotate.Count > 0) optR();
-            if (Vector.Count > 0) optV(); 
+            if (Vector.Count > 0) optV();
             if (Color.Count > 0) optC();
+            if (MoveX.Count > 0) optMX();
+            if (MoveY.Count > 0) optMY();
             for (int gg = 0; gg < Loop.Count; gg++)
             {
                 if (Loop[gg].Move.Count > 0) optM_L(gg);
@@ -23,6 +29,8 @@ namespace LibOSB
                 if (Loop[gg].Rotate.Count > 0) optR_L(gg);
                 if (Loop[gg].Vector.Count > 0) optV_L(gg);
                 if (Loop[gg].Color.Count > 0) optC_L(gg);
+                if (Loop[gg].MoveX.Count > 0) optMX();
+                if (Loop[gg].MoveY.Count > 0) optMY();
             }
             for (int gg = 0; gg < Trigger.Count; gg++)
             {
@@ -32,10 +40,43 @@ namespace LibOSB
                 if (Trigger[gg].Rotate.Count > 0) optR_T(gg);
                 if (Trigger[gg].Vector.Count > 0) optV_T(gg);
                 if (Trigger[gg].Color.Count > 0) optC_T(gg);
+                if (Trigger[gg].MoveX.Count > 0) optMX();
+                if (Trigger[gg].MoveY.Count > 0) optMY();
             }
         }
         private void optM()
         {
+            if (IfDeep)
+            {
+                //根据是否显示判定是否有效
+                int tmpindex = 0;
+                for (int k = 0; k < Fade.FadeOutList.Count; k++)
+                {
+                    for (int j = tmpindex; j < Move.Count; j++)
+                    {
+                        if (Move[j].StartTime > Fade.FadeOutList[k].EndTime)
+                        {
+                            tmpindex = j;
+                            break;
+                        }
+                        if (j < Move.Count - 1 &&
+                          Move[j].StartTime >= Fade.FadeOutList[k].StartTime && Move[j].EndTime <= Fade.FadeOutList[k].EndTime &&
+                          Move[j + 1].StartTime <= Fade.FadeOutList[k].EndTime)
+                        {
+                            Move.Remove(j); Move.ToNull(); ToNull();
+                            j--;
+                        }
+                        else if (j == Move.Count - 1 &&
+                           Move[j].StartTime >= Fade.FadeOutList[k].StartTime && Move[j].EndTime < Fade.FadeOutList[k].EndTime &&
+                          Fade.FadeOutList[k].EndTime >= MaxTime())
+                        {
+                            Move.Remove(j); Move.ToNull(); ToNull();
+                            j--;
+                        }
+                    }
+                }
+                //
+            }
             int i = Move.Count - 1;
             while (i >= 1)
             {
@@ -64,7 +105,7 @@ namespace LibOSB
                 {
                     Move[i - 1].EndTime = Move[i].EndTime; //整合到前面的
                     Move.MoveEndTime(i);
-                    if (Move[i - 1].StartTime > min2 || Move[i - 1].StartTime == min2 && if2min2 == true)
+                    if (Move[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         Move[i - 1].StartTime = Move[i - 1].EndTime; //整合到前面的
                         Move.MoveStartTime(i);
@@ -120,6 +161,40 @@ namespace LibOSB
         }
         private void optF()
         {
+            if (IfDeep)
+            {
+                int? tmpstart = null;
+
+                bool IsInFadeOut = false;
+                if (Fade[0].F1 == 0 && Fade[0].StartTime > MinTime())
+                {
+                    tmpstart = MinTime();
+                    IsInFadeOut = true;
+                }
+                for (int j = 0; j < Fade.Count; j++)
+                {
+
+
+                    if ((Fade[j].F1 != 0 || Fade[j].F2 != 0 ||
+                        (Fade[j].EndTime == MaxTime() && Fade[j].F2 == 0)
+                        ) && IsInFadeOut == true)
+                    {
+                        Fade.FadeOutList.Add(new ActionTypes.FadeOutTime(tmpstart, Fade[j].StartTime));
+                        IsInFadeOut = false;
+                    }
+                    if (Fade[j].F2 == 0 && IsInFadeOut == false)
+                    {
+                        tmpstart = Fade[j].EndTime;
+                        IsInFadeOut = true;
+                    }
+                }
+                if (IsInFadeOut)
+                {
+                    Fade.FadeOutList.Add(new ActionTypes.FadeOutTime(tmpstart, MaxTime()));
+                    //IsInFadeOut = true;
+                }
+            }
+            ///
             int i = Fade.Count - 1;
             while (i >= 1)
             {
@@ -152,7 +227,7 @@ namespace LibOSB
                 {
                     Fade[i - 1].EndTime = Fade[i].EndTime; //整合到前面的
                     Fade.MoveEndTime(i);
-                    if (Fade[i - 1].StartTime > min2 || Fade[i - 1].StartTime == min2 && if2min2 == true)
+                    if (Fade[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         Fade[i - 1].StartTime = Fade[i - 1].EndTime;
                         Fade.MoveStartTime(i);
@@ -204,6 +279,36 @@ namespace LibOSB
         }
         private void optS()
         {
+            if (IfDeep)
+            {     //根据是否显示判定是否有效
+                int tmpindex = 0;
+                for (int k = 0; k < Fade.FadeOutList.Count; k++)
+                {
+                    for (int j = tmpindex; j < Scale.Count; j++)
+                    {
+                        if (Scale[j].StartTime > Fade.FadeOutList[k].EndTime)
+                        {
+                            tmpindex = j;
+                            break;
+                        }
+                        if (j < Scale.Count - 1 &&
+                          Scale[j].StartTime >= Fade.FadeOutList[k].StartTime && Scale[j].EndTime <= Fade.FadeOutList[k].EndTime &&
+                          Scale[j + 1].StartTime <= Fade.FadeOutList[k].EndTime)
+                        {
+                            Scale.Remove(j); Scale.ToNull(); ToNull();
+                            j--;
+                        }
+                        else if (j == Scale.Count - 1 &&
+                           Scale[j].StartTime >= Fade.FadeOutList[k].StartTime && Scale[j].EndTime < Fade.FadeOutList[k].EndTime &&
+                          Fade.FadeOutList[k].EndTime >= MaxTime())
+                        {
+                            Scale.Remove(j); Scale.ToNull(); ToNull();
+                            j--;
+                        }
+                    }
+                }
+                //
+            }
             int i = Scale.Count - 1;
             while (i >= 1)
             {
@@ -232,7 +337,7 @@ namespace LibOSB
 
                     Scale[i - 1].EndTime = Scale[i].EndTime; //整合到前面的
                     Scale.MoveEndTime(i);
-                    if (Scale[i - 1].StartTime > min2 || Scale[i - 1].StartTime == min2 && if2min2 == true)
+                    if (Scale[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         Scale[i - 1].StartTime = Scale[i - 1].EndTime;
                         Scale.MoveStartTime(i);
@@ -276,6 +381,37 @@ namespace LibOSB
         }
         private void optR()
         {
+            if (IfDeep)
+            {
+                //根据是否显示判定是否有效
+                int tmpindex = 0;
+                for (int k = 0; k < Fade.FadeOutList.Count; k++)
+                {
+                    for (int j = tmpindex; j < Rotate.Count; j++)
+                    {
+                        if (Rotate[j].StartTime > Fade.FadeOutList[k].EndTime)
+                        {
+                            tmpindex = j;
+                            break;
+                        }
+                        if (j < Rotate.Count - 1 &&
+                          Rotate[j].StartTime >= Fade.FadeOutList[k].StartTime && Rotate[j].EndTime <= Fade.FadeOutList[k].EndTime &&
+                          Rotate[j + 1].StartTime <= Fade.FadeOutList[k].EndTime)
+                        {
+                            Rotate.Remove(j); Rotate.ToNull(); ToNull();
+                            j--;
+                        }
+                        else if (j == Rotate.Count - 1 &&
+                           Rotate[j].StartTime >= Fade.FadeOutList[k].StartTime && Rotate[j].EndTime < Fade.FadeOutList[k].EndTime &&
+                          Fade.FadeOutList[k].EndTime >= MaxTime())
+                        {
+                            Rotate.Remove(j); Rotate.ToNull(); ToNull();
+                            j--;
+                        }
+                    }
+                }
+                //
+            }
             int i = Rotate.Count - 1;
             while (i >= 1)
             {
@@ -305,7 +441,7 @@ namespace LibOSB
 
                     Rotate[i - 1].EndTime = Rotate[i].EndTime; //整合到前面的
                     Rotate.MoveEndTime(i);
-                    if (Rotate[i - 1].StartTime > min2 || Rotate[i - 1].StartTime == min2 && if2min2 == true)
+                    if (Rotate[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         Rotate[i - 1].StartTime = Rotate[i - 1].EndTime;
                         Rotate.MoveStartTime(i);
@@ -349,6 +485,36 @@ namespace LibOSB
         }
         private void optV()
         {
+            if (IfDeep)
+            {   //根据是否显示判定是否有效
+                int tmpindex = 0;
+                for (int k = 0; k < Fade.FadeOutList.Count; k++)
+                {
+                    for (int j = tmpindex; j < Vector.Count; j++)
+                    {
+                        if (Vector[j].StartTime > Fade.FadeOutList[k].EndTime)
+                        {
+                            tmpindex = j;
+                            break;
+                        }
+                        if (j < Vector.Count - 1 &&
+                          Vector[j].StartTime >= Fade.FadeOutList[k].StartTime && Vector[j].EndTime <= Fade.FadeOutList[k].EndTime &&
+                          Vector[j + 1].StartTime <= Fade.FadeOutList[k].EndTime)
+                        {
+                            Vector.Remove(j); Vector.ToNull(); ToNull();
+                            j--;
+                        }
+                        else if (j == Vector.Count - 1 &&
+                           Vector[j].StartTime >= Fade.FadeOutList[k].StartTime && Vector[j].EndTime < Fade.FadeOutList[k].EndTime &&
+                          Fade.FadeOutList[k].EndTime >= MaxTime())
+                        {
+                            Vector.Remove(j); Vector.ToNull(); ToNull();
+                            j--;
+                        }
+                    }
+                }
+                //
+            }
             int i = Vector.Count - 1;
             while (i >= 1)
             {
@@ -377,7 +543,7 @@ namespace LibOSB
                 {
                     Vector[i - 1].EndTime = Vector[i].EndTime; //整合到前面的
                     Vector.MoveEndTime(i);
-                    if (Vector[i - 1].StartTime > min2 || Vector[i - 1].StartTime == min2 && if2min2 == true)
+                    if (Vector[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         Vector[i - 1].StartTime = Vector[i - 1].EndTime; //整合到前面的
                         Vector.MoveStartTime(i);
@@ -420,6 +586,36 @@ namespace LibOSB
         }
         private void optC()
         {
+            if (IfDeep)
+            {  //根据是否显示判定是否有效
+                int tmpindex = 0;
+                for (int k = 0; k < Fade.FadeOutList.Count; k++)
+                {
+                    for (int j = tmpindex; j < Color.Count; j++)
+                    {
+                        if (Color[j].StartTime > Fade.FadeOutList[k].EndTime)
+                        {
+                            tmpindex = j;
+                            break;
+                        }
+                        if (j < Color.Count - 1 &&
+                          Color[j].StartTime >= Fade.FadeOutList[k].StartTime && Color[j].EndTime <= Fade.FadeOutList[k].EndTime &&
+                          Color[j + 1].StartTime <= Fade.FadeOutList[k].EndTime)
+                        {
+                            Color.Remove(j); Color.ToNull(); ToNull();
+                            j--;
+                        }
+                        else if (j == Color.Count - 1 &&
+                           Color[j].StartTime >= Fade.FadeOutList[k].StartTime && Color[j].EndTime < Fade.FadeOutList[k].EndTime &&
+                          Fade.FadeOutList[k].EndTime >= MaxTime())
+                        {
+                            Color.Remove(j); Color.ToNull(); ToNull();
+                            j--;
+                        }
+                    }
+                }
+                //
+            }
             int i = Color.Count - 1;
             while (i >= 1)
             {
@@ -448,7 +644,7 @@ namespace LibOSB
                 {
                     Color[i - 1].EndTime = Color[i].EndTime; //整合到前面的
                     Color.MoveEndTime(i);
-                    if (Color[i - 1].StartTime > min2 || Color[i - 1].StartTime == min2 && if2min2 == true)
+                    if (Color[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         Color[i - 1].StartTime = Color[i - 1].EndTime; //整合到前面的
                         Color.MoveStartTime(i);
@@ -491,6 +687,36 @@ namespace LibOSB
         }
         private void optMX()
         {
+            if (IfDeep)
+            {    //根据是否显示判定是否有效
+                int tmpindex = 0;
+                for (int k = 0; k < Fade.FadeOutList.Count; k++)
+                {
+                    for (int j = tmpindex; j < MoveX.Count; j++)
+                    {
+                        if (MoveX[j].StartTime > Fade.FadeOutList[k].EndTime)
+                        {
+                            tmpindex = j;
+                            break;
+                        }
+                        if (j < MoveX.Count - 1 &&
+                          MoveX[j].StartTime >= Fade.FadeOutList[k].StartTime && MoveX[j].EndTime <= Fade.FadeOutList[k].EndTime &&
+                          MoveX[j + 1].StartTime <= Fade.FadeOutList[k].EndTime)
+                        {
+                            MoveX.Remove(j); MoveX.ToNull(); ToNull();
+                            j--;
+                        }
+                        else if (j == MoveX.Count - 1 &&
+                           MoveX[j].StartTime >= Fade.FadeOutList[k].StartTime && MoveX[j].EndTime < Fade.FadeOutList[k].EndTime &&
+                          Fade.FadeOutList[k].EndTime >= MaxTime())
+                        {
+                            MoveX.Remove(j); MoveX.ToNull(); ToNull();
+                            j--;
+                        }
+                    }
+                }
+                //
+            }
             int i = MoveX.Count - 1;
             while (i >= 1)
             {
@@ -519,7 +745,7 @@ namespace LibOSB
 
                     MoveX[i - 1].EndTime = MoveX[i].EndTime; //整合到前面的
                     MoveX.MoveEndTime(i);
-                    if (MoveX[i - 1].StartTime > min2 || MoveX[i - 1].StartTime == min2 && if2min2 == true)
+                    if (MoveX[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         MoveX[i - 1].StartTime = MoveX[i - 1].EndTime;
                         MoveX.MoveStartTime(i);
@@ -563,6 +789,36 @@ namespace LibOSB
         }
         private void optMY()
         {
+            if (IfDeep)
+            {   //根据是否显示判定是否有效
+                int tmpindex = 0;
+                for (int k = 0; k < Fade.FadeOutList.Count; k++)
+                {
+                    for (int j = tmpindex; j < MoveY.Count; j++)
+                    {
+                        if (MoveY[j].StartTime > Fade.FadeOutList[k].EndTime)
+                        {
+                            tmpindex = j;
+                            break;
+                        }
+                        if (j < MoveY.Count - 1 &&
+                          MoveY[j].StartTime >= Fade.FadeOutList[k].StartTime && MoveY[j].EndTime <= Fade.FadeOutList[k].EndTime &&
+                          MoveY[j + 1].StartTime <= Fade.FadeOutList[k].EndTime)
+                        {
+                            MoveY.Remove(j); MoveY.ToNull(); ToNull();
+                            j--;
+                        }
+                        else if (j == MoveY.Count - 1 &&
+                           MoveY[j].StartTime >= Fade.FadeOutList[k].StartTime && MoveY[j].EndTime < Fade.FadeOutList[k].EndTime &&
+                          Fade.FadeOutList[k].EndTime >= MaxTime())
+                        {
+                            MoveY.Remove(j); MoveY.ToNull(); ToNull();
+                            j--;
+                        }
+                    }
+                }
+                //
+            }
             int i = MoveY.Count - 1;
             while (i >= 1)
             {
@@ -591,7 +847,7 @@ namespace LibOSB
 
                     MoveY[i - 1].EndTime = MoveY[i].EndTime; //整合到前面的
                     MoveY.MoveEndTime(i);
-                    if (MoveY[i - 1].StartTime > min2 || MoveY[i - 1].StartTime == min2 && if2min2 == true)
+                    if (MoveY[i - 1].StartTime == min2 && if2min2 == true)
                     {
                         MoveY[i - 1].StartTime = MoveY[i - 1].EndTime;
                         MoveY.MoveStartTime(i);

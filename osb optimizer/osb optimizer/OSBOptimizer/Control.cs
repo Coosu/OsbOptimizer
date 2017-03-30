@@ -6,7 +6,7 @@ using System.IO;
 
 namespace LibOSB
 {
-    static class sControls
+    static class SControl
     {
         static string backuproot = "";
 
@@ -37,8 +37,7 @@ namespace LibOSB
         }
 
         //static string tmp = "";
-        static StringBuilder tmp = new StringBuilder();
-
+    
         public static string BackupRoot { get => backuproot; set => backuproot = value; }
 
         public static void Backup(string root)
@@ -57,24 +56,6 @@ namespace LibOSB
                 }
             }
         }
-        public static object Eval(string s, out bool err)
-        {
-            tmp.AppendLine(s);
-
-            try
-            {
-                Microsoft.JScript.Vsa.VsaEngine ve = Microsoft.JScript.Vsa.VsaEngine.CreateEngine();
-                object result = Microsoft.JScript.Eval.JScriptEvaluate(tmp.ToString(), ve);
-                err = false;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                tmp.Clear();
-                err = true;
-                return ex.StackTrace;
-            }
-
-        }
+      
     }
 }

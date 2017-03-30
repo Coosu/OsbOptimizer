@@ -18,8 +18,7 @@ namespace LibOSB
         }
         public string Check(string str, int line)
         {
-            bool error;
-            object result = sControls.Eval(str, out error);
+            object result = Eval(str, out bool error);
             if (error) throw new Exception(str);
             if (result != null) return result.ToString();
             else return "";
@@ -77,6 +76,27 @@ namespace LibOSB
             }
             if (list.Count == 0) list.Add(-1);
             return list;
+        }
+
+        static StringBuilder tmp = new StringBuilder();
+        private static object Eval(string s, out bool err)
+        {
+            tmp.AppendLine(s);
+
+            try
+            {
+                Microsoft.JScript.Vsa.VsaEngine ve = Microsoft.JScript.Vsa.VsaEngine.CreateEngine();
+                object result = Microsoft.JScript.Eval.JScriptEvaluate(tmp.ToString(), ve);
+                err = false;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                tmp.Clear();
+                err = true;
+                return ex.StackTrace;
+            }
+
         }
         private object Eval(string s)
         {

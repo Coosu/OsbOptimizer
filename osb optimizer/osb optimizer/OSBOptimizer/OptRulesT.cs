@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOSB
 {
-    partial class sbObject
+    partial class SBObject
     {
         private void optM_T(int gg)
         {

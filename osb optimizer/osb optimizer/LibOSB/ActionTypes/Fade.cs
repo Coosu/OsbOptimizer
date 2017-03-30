@@ -5,12 +5,28 @@ using System.Text;
 
 namespace LibOSB.ActionTypes
 {
+    class FadeOutTime
+    {
+        private int? startTime, endTime;
+
+        public int? StartTime { get => startTime; set => startTime = value; }
+        public int? EndTime { get => endTime; set => endTime = value; }
+
+        public FadeOutTime(int? startTime, int? endTime)
+        {
+            StartTime = startTime;
+            EndTime = endTime;
+        }
+    }
+
     class Fade : Actions
     {
         public Fade this[int index]
         {
             get => F[index];
         }
+        private List<FadeOutTime> fadeOutList = new List<FadeOutTime>();
+
         public Fade(byte easing, int starttime, int endtime,
          double F1, double F2, int? i, int? j)
         {
@@ -39,10 +55,12 @@ namespace LibOSB.ActionTypes
             endtime_L.RemoveAt(index);
         }
 
-        public  List<Fade> F = new List<Fade>();
+        public List<Fade> F = new List<Fade>();
         private double f1, f2;
         public double F1 { get => f1; }
         public double F2 { get => f2; }
+        internal List<FadeOutTime> FadeOutList { get => fadeOutList; set => fadeOutList = value; }
+
         public void Add(byte Easing, int StartTime, int EndTime,
          double Fade_1, double Fade_2)
         {

@@ -14,8 +14,9 @@ namespace LibOSB
         public static int Decimal;
         public static bool ifPause = false;
         public static bool ifPause2 = true;
+        public static bool ifPause3 = true;
         public static bool ifCheck = true;
-
+     
         private static long totalline = 0;
         private static double progress;
 
@@ -24,7 +25,7 @@ namespace LibOSB
         public static bool Finsh = false;
         public static StringBuilder sb;
 
-        static sbObject obj;
+        static SBObject obj;
         private static string before;
         private static string after;
 
@@ -44,7 +45,7 @@ namespace LibOSB
 
         public static double Progress { get => progress; }
 
-        private static void exception(Exception ex = null, string exMessage = null)
+        private static void Exception(Exception ex = null, string exMessage = null, bool isobject = false)
         {
             if (ex != null)
             {
@@ -52,7 +53,10 @@ namespace LibOSB
             }
             else
             {
-                Reporter.ExceptionMessages.Add(currentLine, exMessage, DateTime.Now);
+                if (isobject == false)
+                    Reporter.ExceptionMessages.Add(currentLine, exMessage, DateTime.Now);
+                else
+                    Reporter.ExceptionMessages.Add(CurrentObjLine, exMessage, DateTime.Now);
             }
             errnum++;
             Reporter.TotalUnrecognizedLines = errnum;
@@ -226,26 +230,26 @@ namespace LibOSB
                                 starttime = int.Parse(@params[2]);
                                 endtime = int.Parse(@params[3]);
                             }
-                            if (type == "M") addRules.AddToM(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "S") addRules.AddToS(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "F") addRules.AddToF(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "R") addRules.AddToR(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "V") addRules.AddToV(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "C") addRules.AddToC(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "MX") addRules.AddToMX(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "MY") addRules.AddToMY(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "P") addRules.AddToP(easing, starttime, endtime, @params, tmpindex);
-                            else if (type == "L") addRules.AddToL(starttime, @params);
-                            else if (type == "T") addRules.AddToT(@params, starttime, endtime);
+                            if (type == "M") AddRules.AddToM(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "S") AddRules.AddToS(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "F") AddRules.AddToF(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "R") AddRules.AddToR(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "V") AddRules.AddToV(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "C") AddRules.AddToC(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "MX") AddRules.AddToMX(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "MY") AddRules.AddToMY(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "P") AddRules.AddToP(easing, starttime, endtime, @params, tmpindex);
+                            else if (type == "L") AddRules.AddToL(starttime, @params);
+                            else if (type == "T") AddRules.AddToT(@params, starttime, endtime);
                             else
                             {
-                                exception(exMessage: "Unknown action command in Sprite[" + CurrentObjLine + "]: " + type);
+                                Exception(exMessage: "Unknown action command in Sprite[" + CurrentObjLine + "]: " + type);
                                 //errnum++;
                             }
                         }
                         catch (Exception ex)
                         {
-                            exception(ex: ex);
+                            Exception(ex: ex);
 
                             //errnum++;
                             //Console.WriteLine("{0} - Line {1}", ex.Message, currentLine);
@@ -253,7 +257,7 @@ namespace LibOSB
                     }
                     else
                     {
-                        exception(exMessage: "Unknown action command in Sprite[" + CurrentObjLine + "]: " + type);
+                        Exception(exMessage: "Unknown action command in Sprite[" + CurrentObjLine + "]: " + type);
                     }
                 }
                 else
@@ -269,7 +273,7 @@ namespace LibOSB
                         string root = @params[3];
                         double x = double.Parse(@params[4]);
                         double y = double.Parse(@params[5]);
-                        obj = new sbObject(type, layer, origin, root, x, y, currentLine);
+                        obj = new SBObject(type, layer, origin, root, x, y, currentLine);
                     }
                     else if (@params[0] == "Animation")
                     {
@@ -285,11 +289,11 @@ namespace LibOSB
                         double framecount = double.Parse(@params[6]);
                         double framerate = double.Parse(@params[7]);
                         string looptype = @params[8];
-                        obj = new sbObject(type, layer, origin, root, x, y, framecount, framerate, looptype, currentLine);
+                        obj = new SBObject(type, layer, origin, root, x, y, framecount, framerate, looptype, currentLine);
                     }
                     else
                     {
-                        exception(exMessage: "Unknown sprite command: " + @params[0].Trim());
+                        Exception(exMessage: "Unknown sprite command: " + @params[0].Trim());
                     }
                     //Err(); //Console.WriteLine("可能是写了假sb. (Line {0})", currentLine);
                 }
@@ -307,13 +311,18 @@ namespace LibOSB
 
                 if (ifCheck && !IsOK)
                 {
+                    Exception(exMessage: "Exist illogical, conflicting or obsolete commands.", isobject: true);
                     after = "IsError";
-                    Pause = true; Display = true;
-                    while (Pause)
+                    if (ifPause3)
                     {
-                        System.Threading.Thread.Sleep(10);
+                        Pause = true; Display = true;
+                        while (Pause)
+                        {
+                            System.Threading.Thread.Sleep(10);
+                        }
+                        Display = false;
                     }
-                    Display = false;
+                    else sb.Append(before);
                 }
                 else
                 {
@@ -349,7 +358,7 @@ namespace LibOSB
                         }
                         else sb.Append(after);
 
-                        while (Pause) 
+                        while (Pause)
                         {
                             System.Threading.Thread.Sleep(10);
                         }
@@ -367,7 +376,7 @@ namespace LibOSB
 
             }
         }
-        static class addRules
+        static class AddRules
         {
             public static double Round(double x)
             {
