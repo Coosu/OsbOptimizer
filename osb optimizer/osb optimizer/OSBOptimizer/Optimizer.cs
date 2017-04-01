@@ -16,7 +16,8 @@ namespace LibOSB
         public static bool ifPause2 = true;
         public static bool ifPause3 = true;
         public static bool ifCheck = true;
-     
+        public static bool ifVar = true;
+
         private static long totalline = 0;
         private static double progress;
 
@@ -79,6 +80,8 @@ namespace LibOSB
             errnum = 0;
             currentObjLine = 0;
             currentLine = 0;
+
+            Variables.lst.Clear();
         }
 
         /// <summary>
@@ -183,6 +186,91 @@ namespace LibOSB
             }
 
             sb.AppendLine(@"//Storyboard Sound Samples");
+            if (ifVar)
+            {
+                var sb2 = new StringBuilder();
+                sb2.AppendLine("[Variables]");
+                sb2.AppendLine("$1=BottomLeft");
+                sb2.AppendLine("$2=BottomCentre");
+                sb2.AppendLine("$3=BottomRight");
+                sb2.AppendLine("$4=CentreLeft");
+                sb2.AppendLine("$5=Centre");
+                sb2.AppendLine("$6=CentreRight");
+                sb2.AppendLine("$7=TopLeft");
+                sb2.AppendLine("$8=TopCentre");
+                sb2.AppendLine("$9=TopRight");
+                sb2.AppendLine("$a=Sprite");
+                sb2.AppendLine("$b=Animation");
+                sb2.AppendLine("$c=Background");
+                sb2.AppendLine("$d=Foreground");
+                sb2.AppendLine("$e=Fail");
+                sb2.AppendLine("$f=Pass");
+                sb2.AppendLine("$z=Sprite,Foreground,Centre,");
+                sb2.AppendLine("$y=Sprite,Foreground,TopLeft,");
+                sb2.AppendLine("$x=Sprite,Background,Centre,");
+                sb2.AppendLine("$w=Sprite,Background,TopLeft,");
+                sb2.AppendLine("$v=,320,240");
+                sb2.AppendLine("$Ga= F,0,"); sb2.AppendLine("$Gb= F,1,"); sb2.AppendLine("$Gc= F,2,");
+                sb2.AppendLine("$Gd= M,0,"); sb2.AppendLine("$Ge= M,1,"); sb2.AppendLine("$Gf= M,2,");
+                sb2.AppendLine("$Gg= MX,0,"); sb2.AppendLine("$Gh= MX,1,"); sb2.AppendLine("$Gi= MX,2,");
+                sb2.AppendLine("$Gj= MY,0,"); sb2.AppendLine("$Gk= MY,1,"); sb2.AppendLine("$Gl= MY,2,");
+                sb2.AppendLine("$Gm= P,0,"); sb2.AppendLine("$Gn= P,1,"); sb2.AppendLine("$Go= P,2,");
+                sb2.AppendLine("$Gp= R,0,"); sb2.AppendLine("$Gq= R,1,"); sb2.AppendLine("$Gr= R,2,");
+                sb2.AppendLine("$Gs= S,0,"); sb2.AppendLine("$Gt= S,1,"); sb2.AppendLine("$Gu= S,2,");
+                sb2.AppendLine("$Gv= V,0,"); sb2.AppendLine("$Gw= V,1,"); sb2.AppendLine("$Gx= V,2,");
+                sb2.AppendLine("$Ha= C,0,"); sb2.AppendLine("$Hb= C,1,"); sb2.AppendLine("$Hc= C,2,");
+                sb2.AppendLine("$i=,0,1"); sb2.AppendLine("$j=,1,0");
+                //sb2.AppendLine("$k=,LoopForever"); sb2.AppendLine("$l=,LoopOnce");
+
+                sb.Replace("Sprite,Foreground,Centre,", "$z");
+                sb.Replace("Sprite,Foreground,TopLeft,", "$y");
+                sb.Replace("Sprite,Background,Centre,", "$x");
+                sb.Replace("Sprite,Background,TopLeft,", "$w");
+
+                sb.Replace("BottomLeft", "$1");
+                sb.Replace("BottomCentre", "$2");
+                sb.Replace("BottomRight", "$3");
+                sb.Replace("CentreLeft", "$4");
+                sb.Replace("Centre", "$5");
+                sb.Replace("CentreRight", "$6");
+                sb.Replace("TopLeft", "$7");
+                sb.Replace("TopCentre", "$8");
+                sb.Replace("TopRight", "$9");
+
+                sb.Replace("Background", "$c");
+                sb.Replace("Fail", "$e");
+                sb.Replace("Pass", "$f");
+                sb.Replace("Foreground", "$d");
+
+                sb.Replace("Sprite", "$a");
+                sb.Replace("Animation", "$b");
+
+                //sb.Replace("LoopForever", "$k");
+                //sb.Replace("LoopOnce", "$l");
+                int tmp = 0;
+                for (int test = 0; test < Variables.lst.Count; test++)
+                {
+                    if (Variables.lst[test].Count > 1)
+                    {
+                        sb.Replace(Variables.lst[test].Name + ",", "$R" + string.Format("{0:D3}", tmp) + ",");
+                        sb2.AppendLine("$R" + string.Format("{0:D3}", tmp) + "=" + Variables.lst[test].Name);
+                        tmp++;
+                    }
+                }
+                sb.Replace(" F,0,", "$Ga"); sb.Replace(" F,1,", "$Gb"); sb.Replace(" F,2,", "$Gc");
+                sb.Replace(" M,0,", "$Gd"); sb.Replace(" M,1,", "$Ge"); sb.Replace(" M,2,", "$Gf");
+                sb.Replace(" MX,0,", "$Gg"); sb.Replace(" MX,1,", "$Gh"); sb.Replace(" MX,2,", "$Gi");
+                sb.Replace(" MY,0,", "$Gj"); sb.Replace(" MY,1,", "$Gk"); sb.Replace(" MY,2,", "$Gl");
+                sb.Replace(" P,0,", "$Gm"); sb.Replace(" P,1,", "$Gn"); sb.Replace(" P,2,", "$Go");
+                sb.Replace(" R,0,", "$Gp"); sb.Replace(" R,1,", "$Gq"); sb.Replace(" R,2,", "$Gr");
+                sb.Replace(" S,0,", "$Gs"); sb.Replace(" S,1,", "$Gt"); sb.Replace(" S,2,", "$Gu");
+                sb.Replace(" V,0,", "$Gv"); sb.Replace(" V,1,", "$Gw"); sb.Replace(" V,2,", "$Gx");
+                sb.Replace(" C,0,", "$Ha"); sb.Replace(" C,1,", "$Hb"); sb.Replace(" C,2,", "$Hc");
+                sb.Replace(",320,240", "$v");
+                sb.Replace(",0,1", "$i");
+                sb.Replace(",1,0", "$j");
+                sb.Insert(0, sb2.ToString());
+            }
             GC.Collect();
             Finsh = true;
         }
@@ -306,9 +394,10 @@ namespace LibOSB
             {
                 currentObjLine = obj.Line;
                 Reporter.TotalSpriteNumber++;
-                bool IsOK = ChkRules.Check(obj);
+                Variables.AddRoot(obj.FilePath);
                 before = obj.ToString();
 
+                bool IsOK = ChkRules.Check(obj);
                 if (ifCheck && !IsOK)
                 {
                     Exception(exMessage: "Exist illogical, conflicting or obsolete commands.", isobject: true);

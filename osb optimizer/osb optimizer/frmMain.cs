@@ -28,7 +28,242 @@ namespace LibOSB
             y = yy;
             x = xx;
         }
+        private void Coloring()
+        {
+            string gjz = "Sprite,Animation";
+            string[] cm = gjz.Split(',');
+            foreach (string a in cm)
+            {
+                int indexSp = richTextBox3.Text.IndexOf(a);
+                if (indexSp != -1)
+                {
+                    richTextBox3.Select(indexSp, a.Length);
+                    richTextBox3.SelectionColor = Color.FromArgb(255, 86, 156, 214);
+                }
+            }
 
+            string cs = "Background,Fail,Pass,Foreground,TopLeft,TopCentre,TopRight,CentreLeft,Centre,CentreRight,BottomLeft,BottomCentre,BottomRight";
+            string[] cm2 = cs.Split(',');
+            foreach (string a in cm2)
+            {
+                int indexSp = richTextBox3.Text.IndexOf(a);
+                if (indexSp != -1)
+                {
+                    richTextBox3.Select(indexSp, a.Length);
+                    richTextBox3.SelectionColor = Color.FromArgb(255, 184, 215, 163);
+                    //richTextBox3 .SelectionBackColor = Color.FromArgb(55, 255, 255, 255);
+                }
+            }
+
+            int q1 = richTextBox3.Text.IndexOf("\"");
+            int q2 = richTextBox3.Text.LastIndexOf("\"");
+            if (q1 != -1 && q2 != -1 && q1 != q2)
+            {
+                richTextBox3.Select(q1, q2 - q1 + 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 214, 157, 133);
+            }
+
+            List<int> lst = SControl.FindAllindex(richTextBox3.Text, "M,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "C,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "F,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "L,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "MX,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 2);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "MY,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 2);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "P,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "R,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "S,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "T,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox3.Text, "V,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox3.Select(lst[i], 1);
+                richTextBox3.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+
+
+            richTextBox3.Select(0, 0);
+        }
+        private void Coloring2()
+        {
+            string gjz = "Sprite,Animation";
+            string[] cm = gjz.Split(',');
+            foreach (string a in cm)
+            {
+                int indexSp = richTextBox4.Text.IndexOf(a);
+                if (indexSp != -1)
+                {
+                    richTextBox4.Select(indexSp, a.Length);
+                    richTextBox4.SelectionColor = Color.FromArgb(255, 86, 156, 214);
+                }
+            }
+
+            string cs = "Background,Fail,Pass,Foreground,TopLeft,TopCentre,TopRight,CentreLeft,Centre,CentreRight,BottomLeft,BottomCentre,BottomRight";
+            string[] cm2 = cs.Split(',');
+            foreach (string a in cm2)
+            {
+                int indexSp = richTextBox4.Text.IndexOf(a);
+                if (indexSp != -1)
+                {
+                    richTextBox4.Select(indexSp, a.Length);
+                    richTextBox4.SelectionColor = Color.FromArgb(255, 184, 215, 163);
+                }
+            }
+
+            int q1 = richTextBox4.Text.IndexOf("\"");
+            int q2 = richTextBox4.Text.LastIndexOf("\"");
+            if (q1 != -1 && q2 != -1 && q1 != q2)
+            {
+                richTextBox4.Select(q1, q2 - q1 + 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 214, 157, 133);
+            }
+
+            List<int> lst = SControl.FindAllindex(richTextBox4.Text, "M,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "C,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "F,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "L,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "MX,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 2);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "MY,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 2);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "P,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "R,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "S,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "T,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+            lst = SControl.FindAllindex(richTextBox4.Text, "V,");
+            for (int i = 0; i < lst.Count; i++)
+            {
+                richTextBox4.Select(lst[i], 1);
+                richTextBox4.SelectionColor = Color.FromArgb(255, 78, 201, 176);
+            }
+
+
+            richTextBox4.Select(0, 0);
+        }
+        private void Coloring3()
+        {
+            string[] lines = richTextBox3.Text.Split('\n');
+            int index = 0;
+            foreach (string line in lines)
+            {
+                if (richTextBox4.Text.IndexOf(line) == -1)
+                {
+                    richTextBox3.Select(richTextBox3.Text.IndexOf(line), line.Length);
+                    richTextBox3.SelectionBackColor = Color.FromArgb(255, 120, 64, 64);
+                }
+                index++;
+            }
+            string[] lines2 = richTextBox4.Text.Split('\n');
+            int index2 = 0;
+            foreach (string line in lines2)
+            {
+                if (richTextBox3.Text.IndexOf(line) == -1)
+                {
+                    richTextBox4.Select(richTextBox4.Text.IndexOf(line), line.Length);
+                    richTextBox4.SelectionBackColor = Color.FromArgb(255, 55, 80, 55);
+                }
+                index2++;
+            }
+            richTextBox3.Select(0, 0);
+            richTextBox4.Select(0, 0);
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             GetSettings();
@@ -135,12 +370,18 @@ namespace LibOSB
             {
                 if (textBox1.Text.Trim() == "") return;
                 value = int.Parse(textBox1.Text);
+                if (value < 0 || value > 15)
+                {
+                    MessageBox.Show("Please enter a number between 0 and 15.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    textBox1.Focus();
+                    return;
+                }
                 Optimizer.Decimal = value;
                 WriteSettings();
             }
             catch
             {
-                MessageBox.Show("Please enter a valid number", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please enter a valid number.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBox1.Focus();
             }
         }
@@ -201,6 +442,7 @@ namespace LibOSB
             WriteINI("OptimizationSettings", "Decimal", textBox1.Text, iniroot);
             WriteINI("OptimizationSettings", "CheckBeforeOptimize", chkchk.Checked.ToString(), iniroot);
             WriteINI("OptimizationSettings", "DeepOptimization", chkDeep.Checked.ToString(), iniroot);
+            WriteINI("OptimizationSettings", "VariableSubstitutions", chkvar.Checked.ToString(), iniroot);
 
             WriteINI("RootSetting", "BackupFile", SControl.BackupRoot, iniroot);
 
@@ -219,10 +461,12 @@ namespace LibOSB
             textBox1.Text = GetINI("OptimizationSettings", "Decimal", "3", iniroot);
             chkchk.Checked = bool.Parse(GetINI("OptimizationSettings", "CheckBeforeOptimize", "True", iniroot));
             chkDeep.Checked = bool.Parse(GetINI("OptimizationSettings", "DeepOptimization", "True", iniroot));
+            chkvar.Checked = bool.Parse(GetINI("OptimizationSettings", "VariableSubstitutions", "False", iniroot));
             Optimizer.ifCheck = chkchk.Checked;
+            Optimizer.ifVar = chkvar.Checked;
             SBObject.IfDeep = chkDeep.Checked;
 
-            chkinfo.Checked = bool.Parse(GetINI("InfoSetting", "CollectResult", "True", iniroot));
+            chkinfo.Checked = bool.Parse(GetINI("InfoSetting", "CollectResult", "False", iniroot));
             chkex.Checked = bool.Parse(GetINI("InfoSetting", "CollectException", "True", iniroot));
             InfoCollector.IfCollectInfo = chkinfo.Checked;
             InfoCollector.IfCollectEx = chkex.Checked;
@@ -286,10 +530,29 @@ namespace LibOSB
                 error = true;
                 return;
             }
-            richTextBox1.Clear();
-            richTextBox2.Clear();
-            richTextBox1.ScrollBars = ScrollBars.None;
-            richTextBox2.ScrollBars = ScrollBars.None;
+            catch (ArgumentException)
+            {
+                lbl_Line1.Text = "Please enter a valid root.";
+                error = true;
+                return;
+            }
+            catch (NotSupportedException)
+            {
+                lbl_Line1.Text = "Root not supported.";
+                error = true;
+                return;
+            }
+            catch (Exception ex)
+            {
+                lbl_Line1.Text = ex.Message;
+                error = true;
+                return;
+            }
+            richTextBox3.Clear();
+            richTextBox4.Clear();
+
+            //richTextBox3.ScrollBars = RichTextBoxScrollBars.None;
+            //richTextBox4.ScrollBars = ScrollBars.None;
 
             txtRoot.Enabled = false;
             button1.Enabled = false;
@@ -308,8 +571,8 @@ namespace LibOSB
             timer1.Enabled = false;
             detectStatus.Enabled = false;
             timerProgress.Enabled = false;
-            richTextBox1.ScrollBars = ScrollBars.Vertical;
-            richTextBox2.ScrollBars = ScrollBars.Vertical;
+            //richTextBox3.ScrollBars = RichTextBoxScrollBars.Vertical;
+            //richTextBox4.ScrollBars = ScrollBars.Vertical;
 
             if (!error)
             {
@@ -320,9 +583,9 @@ namespace LibOSB
                 Reporter.EndTime = DateTime.Now;
                 Reporter.SizeAfter = new System.IO.FileInfo(objectroot).Length;
                 Reporter.ObjectFileRoot = objectroot;
-                richTextBox1.Text = Reporter.ToString(false);
-                richTextBox2.ForeColor = Color.FromArgb(255, 224, 224, 224);
-                richTextBox2.Text = Reporter.ToString(true);
+                richTextBox3.Text = Reporter.ToString(false);
+                richTextBox4.ForeColor = Color.FromArgb(255, 224, 224, 224);
+                richTextBox4.Text = Reporter.ToString(true);
                 lbl_Line1.Text = "Optimization finished.";
                 if (InfoCollector.IfCollectInfo)
                 {
@@ -336,11 +599,11 @@ namespace LibOSB
         }
         private void @continue_rdy()
         {
-            richTextBox1.Clear();
-            richTextBox2.Clear();
+            richTextBox3.Clear();
+            richTextBox4.Clear();
 
-            richTextBox1.ScrollBars = ScrollBars.None;
-            richTextBox2.ScrollBars = ScrollBars.None;
+            //richTextBox3.ScrollBars = RichTextBoxScrollBars.None;
+            //richTextBox4.ScrollBars = ScrollBars.None;
 
 
             button2.Enabled = false;
@@ -359,39 +622,41 @@ namespace LibOSB
             after = Optimizer.After;
             lbl_Line1.Text = "Found new sprite on line " + Optimizer.CurrentObjLine.ToString();
 
-            richTextBox1.ScrollBars = ScrollBars.Vertical;
-            richTextBox2.ScrollBars = ScrollBars.Vertical;
+            //richTextBox3.ScrollBars = RichTextBoxScrollBars.Vertical;
+            //richTextBox4.ScrollBars = ScrollBars.Vertical;
 
-            if (before.Length > 10000) richTextBox1.Text = @"// Too Long to display.";
-            else richTextBox1.Text = before;
+            if (before.Length > 10000) richTextBox3.Text = @"// Too Long to display.";
+            else richTextBox3.Text = before;
             if (after.Length > 10000)
             {
-                richTextBox2.ForeColor = Color.FromArgb(255, 224, 224, 224);
-                richTextBox2.Text = @"// Too Long to display.";
+                richTextBox4.ForeColor = Color.FromArgb(255, 224, 224, 224);
+                richTextBox4.Text = @"// Too Long to display.";
             }
             else if (after == "")
             {
-                richTextBox2.ForeColor = Color.FromArgb(255, 255, 255, 200);
-                richTextBox2.Text = @"// Unuseful object. Deleted.";
+                richTextBox4.ForeColor = Color.FromArgb(255, 255, 255, 200);
+                richTextBox4.Text = @"// Unuseful object. Deleted.";
             }
             else if (after == "IsError")
             {
-                richTextBox2.ForeColor = Color.FromArgb(255, 255, 200, 200);
-                richTextBox2.Text = "// Exist illogical, conflicting or obsolete commands.\r\n// Skip this object.";
+                richTextBox4.ForeColor = Color.FromArgb(255, 255, 200, 200);
+                richTextBox4.Text = "// Exist illogical, conflicting or obsolete commands.\r\n// Skip this object.";
             }
             else
             {
-                richTextBox2.ForeColor = Color.FromArgb(255, 224, 224, 224);
-                richTextBox2.Text = after;
-                int gg = richTextBox1.Lines.Length - richTextBox2.Lines.Length;
-                for (int i = 1; i <= gg; i++) richTextBox2.Text += "{" + i + "}\r\n";
+                richTextBox4.ForeColor = Color.FromArgb(255, 224, 224, 224);
+                richTextBox4.Text = after;
+                int gg = richTextBox3.Lines.Length - richTextBox4.Lines.Length;
+                //for (int i = 1; i <= gg; i++) richTextBox4.Text += "{" + i + "}\r\n";
             }
             button2.Enabled = true;
             button3.Enabled = true;
             button2.Focus();
-
-            richTextBox1.ScrollBars = ScrollBars.Vertical;
-            richTextBox2.ScrollBars = ScrollBars.Vertical;
+            Coloring();
+            Coloring2();
+            if (after.Length <= 10000 && after != "" && after != "IsError") Coloring3();
+            //richTextBox3.ScrollBars = RichTextBoxScrollBars.Vertical;
+            //richTextBox4.ScrollBars = ScrollBars.Vertical;
         }
 
         double yy = 9;
@@ -595,7 +860,7 @@ namespace LibOSB
 
         private void chkchk_Click(object sender, EventArgs e)
         {
-             WriteSettings();
+            WriteSettings();
         }
 
         private void chkchk_CheckedChanged(object sender, EventArgs e)
@@ -628,6 +893,27 @@ namespace LibOSB
         private void chkDeep_Click(object sender, EventArgs e)
         {
             WriteSettings();
+        }
+
+        private void chkvar_CheckedChanged(object sender, EventArgs e)
+        {
+            Optimizer.ifVar = chkvar.Checked;
+        }
+
+        private void chkvar_Click(object sender, EventArgs e)
+        {
+            WriteSettings();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var fm = new frmAbout();
+            fm.ShowDialog();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://osu.ppy.sh/wiki/Storyboard_Variables");
         }
 
         private void ToStatus4()

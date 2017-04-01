@@ -278,19 +278,41 @@ namespace LibOSB
         {
             if (Type != "Sprite" && Type != "Animation")
                 throw new Exception("Unknown object type.");
-            else type = Type;
-
+            else
+            {
+                //if (Type == "Sprite") type = "$a";
+                //else if (Type == "Animation") type = "$b";
+                type = Type;
+            }
             if (Layer != "Background" && Layer != "Fail"
                      && Layer != "Pass" && Layer != "Foreground")
                 throw new Exception("Unknown Layer.");
-            else layer = Layer;
-
+            else
+            {
+                //if (Layer == "Background") layer = "$c";
+                //else if (Layer == "Fail") layer = "$e";
+                //else if (Layer == "Pass") layer = "$f";
+                //else if (Layer == "Foreground") layer = "$d";
+                layer = Layer;
+            }
             if (Origin != "TopLeft" && Origin != "TopCentre" && Origin != "TopRight"
              && Origin != "CentreLeft" && Origin != "Centre" && Origin != "CentreRight"
              && Origin != "BottomLeft" && Origin != "BottomCentre" && Origin != "BottomRight")
                 throw new Exception("Unknown Origin.");
-            else origin = Origin;
+            else
+            {
+                //if (Origin == "TopLeft") origin = "$7";
+                //else if (Origin == "TopCentre") origin = "$8";
+                //else if (Origin == "TopRight") origin = "$9";
+                //else if (Origin == "CentreLeft") origin = "$4";
+                //else if (Origin == "Centre") origin = "$5";
+                //else if (Origin == "CentreRight") origin = "$6";
+                //else if (Origin == "BottomLeft") origin = "$1";
+                //else if (Origin == "BottomCentre") origin = "$2";
+                //else if (Origin == "BottomRight") origin = "$3";
 
+                origin = Origin;
+            }
             filepath = FilePath;
             x = X;
             y = Y;

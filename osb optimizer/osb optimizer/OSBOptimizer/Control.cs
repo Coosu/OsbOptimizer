@@ -37,7 +37,7 @@ namespace LibOSB
         }
 
         //static string tmp = "";
-    
+
         public static string BackupRoot { get => backuproot; set => backuproot = value; }
 
         public static void Backup(string root)
@@ -56,6 +56,20 @@ namespace LibOSB
                 }
             }
         }
-      
+
+        public static List<int> FindAllindex(string str, string c_str)
+        {
+            int index = -2;
+            int i = 0;
+            var list = new List<int>();
+            while (index != -1)
+            {
+                index = str.IndexOf(c_str, i);
+                if (index != -1) list.Add(index);
+                i = index + 1;
+            }
+            //if (list.Count == 0) list.Add(-1);
+            return list;
+        }
     }
 }
