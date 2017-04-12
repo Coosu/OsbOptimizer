@@ -75,28 +75,30 @@ namespace LibOSB
         {
             get
             {
-                List<int?> min1 = min.FindAll(
-                    delegate (int? x)
-                    {
-                        return x == min.Min();
-                    }
-                    );
-                if (min1.Count > 1) return true;
-                else return false;
+                //List<int?> min1 = min.FindAll(
+                //    delegate (int? x)
+                //    {
+                //        return x == min.Min();
+                //    }
+                //    );
+                //if (min1.Count > 1) return true;
+                //else return false;
+                return min.FindAll((int? x) => x == min.Min()).Count > 1;
             }
         }
         protected bool TwoMax
         {
             get
             {
-                List<int?> max1 = max.FindAll(
-                    delegate (int? x)
-                    {
-                        return x == max.Max();
-                    }
-                    );
-                if (max1.Count > 1) return true;
-                else return false;
+                //List<int?> max1 = max.FindAll(
+                //    delegate (int? x)
+                //    {
+                //        return x == max.Max();
+                //    }
+                //    );
+                //if (max1.Count > 1) return true;
+                //else return false;
+                return max.FindAll((int? x) => x == max.Max()).Count > 1;
             }
         }
 

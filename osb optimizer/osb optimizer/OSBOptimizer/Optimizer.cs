@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using LibOSB;
 using OsuStoryboard.OSBOptimizer;
+using System.Text.RegularExpressions;
 
 namespace LibOSB
 {
@@ -219,7 +220,7 @@ namespace LibOSB
                 sb2.AppendLine("$Gs= S,0,"); sb2.AppendLine("$Gt= S,1,"); sb2.AppendLine("$Gu= S,2,");
                 sb2.AppendLine("$Gv= V,0,"); sb2.AppendLine("$Gw= V,1,"); sb2.AppendLine("$Gx= V,2,");
                 sb2.AppendLine("$Ha= C,0,"); sb2.AppendLine("$Hb= C,1,"); sb2.AppendLine("$Hc= C,2,");
-                sb2.AppendLine("$i=,0,1"); sb2.AppendLine("$j=,1,0");
+                sb2.AppendLine("$i=0,1"); sb2.AppendLine("$j=1,0");
                 //sb2.AppendLine("$k=,LoopForever"); sb2.AppendLine("$l=,LoopOnce");
 
                 sb.Replace("Sprite,Foreground,Centre,", "$z");
@@ -247,6 +248,23 @@ namespace LibOSB
 
                 //sb.Replace("LoopForever", "$k");
                 //sb.Replace("LoopOnce", "$l");
+
+                //string[] tmpstr = Regex.Split(sb.ToString(), "\r\n", RegexOptions.IgnoreCase);
+                //foreach (string str in tmpstr)
+                //{
+                //    bool ifreplaced = false;
+                //    int tmp2 = 0;
+                //    for (int test = 0; test < Variables.lst.Count; test++)
+                //    {
+                //        if (Variables.lst[test].Count > 1)
+                //        {
+                //            string strbefore = str;
+                //            str.Replace(Variables.lst[test].Name + ",", "$R" + string.Format("{0:D3}", tmp2) + ",");
+                //            sb2.AppendLine("$R" + string.Format("{0:D3}", tmp2) + "=" + Variables.lst[test].Name);
+                //            tmp2++;
+                //        }
+                //    }
+                //}
                 int tmp = 0;
                 for (int test = 0; test < Variables.lst.Count; test++)
                 {
@@ -257,6 +275,7 @@ namespace LibOSB
                         tmp++;
                     }
                 }
+
                 sb.Replace(" F,0,", "$Ga"); sb.Replace(" F,1,", "$Gb"); sb.Replace(" F,2,", "$Gc");
                 sb.Replace(" M,0,", "$Gd"); sb.Replace(" M,1,", "$Ge"); sb.Replace(" M,2,", "$Gf");
                 sb.Replace(" MX,0,", "$Gg"); sb.Replace(" MX,1,", "$Gh"); sb.Replace(" MX,2,", "$Gi");
@@ -267,8 +286,8 @@ namespace LibOSB
                 sb.Replace(" V,0,", "$Gv"); sb.Replace(" V,1,", "$Gw"); sb.Replace(" V,2,", "$Gx");
                 sb.Replace(" C,0,", "$Ha"); sb.Replace(" C,1,", "$Hb"); sb.Replace(" C,2,", "$Hc");
                 sb.Replace(",320,240", "$v");
-                sb.Replace(",0,1", "$i");
-                sb.Replace(",1,0", "$j");
+                sb.Replace("0,1", "$i");
+                sb.Replace("1,0", "$j");
                 sb.Insert(0, sb2.ToString());
             }
             GC.Collect();
@@ -280,6 +299,7 @@ namespace LibOSB
 
             if (@params[0].Length >= 1)
             {
+                if (@params[0].Substring(0, 1) == "[") return;
                 if (@params[0].Substring(0, 1) == " ")
                 {
                     string type = @params[0].Trim();

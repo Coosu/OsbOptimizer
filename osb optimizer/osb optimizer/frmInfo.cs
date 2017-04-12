@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
-using System.Diagnostics;
+
 namespace LibOSB
 {
-    partial class frmAbout : Form
+    public partial class frmUpdate : Form
     {
-        public frmAbout()
+        public frmUpdate()
         {
             InitializeComponent();
         }
@@ -24,30 +25,25 @@ namespace LibOSB
         public const int SC_MOVE = 0xF010;
         public const int HTCAPTION = 0x0002;
 
-        private void okButton_Click(object sender, EventArgs e)
+
+        private static UpdateInfo updateinfo;
+
+        internal static UpdateInfo Updateinfo { get => updateinfo; set => updateinfo = value; }
+
+        private void frmInfo_Load(object sender, EventArgs e)
         {
-            //"86,156,214";
+            LblTime.Text = string.Format("Found new version {0} ({1})", updateinfo.Version, updateinfo.Datetime.ToLongDateString());
+            TextInfo.Text = updateinfo.Infomation;
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            Process.Start("http://osu.ppy.sh/forum/t/532042");
-        }
-
-        private void labelProductName_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void frmAbout_Load(object sender, EventArgs e)
-        {
-            //InfoCollector.Update();
-        }
-
-        private void frmAbout_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
+            try
+            {
+                System.Diagnostics.Process.Start(updateinfo.Link);
+            }
+            catch { }
+            timerclose.Enabled = true;
         }
 
         private void timeropen_Tick(object sender, EventArgs e)
@@ -71,14 +67,21 @@ namespace LibOSB
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button6_Click(object sender, EventArgs e)
         {
             timerclose.Enabled = true;
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void frmUpdate_MouseDown(object sender, MouseEventArgs e)
         {
-            Process.Start("http://osu.ppy.sh/u/1243669");
+            ReleaseCapture();
+            SendMessage(Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
+        }
+
+        private void LblTime_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace LibOSB
         Thread t1;
         private static string before;
         private static string after;
+        private static string Version = "2.0";
 
         public frmMain()
         {
@@ -264,9 +265,44 @@ namespace LibOSB
             richTextBox3.Select(0, 0);
             richTextBox4.Select(0, 0);
         }
+        int firstcheck = 0;
+        private void CheckUpdate()
+        {
+            try
+            {
+                Client.StartListen(firstcheck);
+                var timer = new Stopwatch();
+                timer.Start();
+                while (Client.UpdateInfo == null && !Client.IsFailed)
+                {
+                    if (timer.ElapsedMilliseconds > 3000)
+                    {
+                        timer.Stop();
+                        timer = null;
+                        throw new Exception("Time out.");
+                    }
+                    Thread.Sleep(1);
+                }
+                if (Client.IsFailed) throw new Exception("Sever config error.");
+
+                frmUpdate.Updateinfo = Client.UpdateInfo;
+
+                if (frmUpdate.Updateinfo != null && frmUpdate.Updateinfo.Version != Version)
+                {
+                    button9.Text = "!";
+                    button9.BackColor = Color.FromArgb(255, 100, 100, 100);
+                }
+            }
+            catch (Exception ex)
+            {
+                //lbl_Line1.Text = ex.Message;
+            }
+            firstcheck++;
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             GetSettings();
+            DetectUpdate_Tick(null, null);
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -342,11 +378,13 @@ namespace LibOSB
         }
         private void button4_Click(object sender, EventArgs e)
         {
-            var FileDialog = new OpenFileDialog();
-            FileDialog.Filter = "osb file|*.osb|osu file|*.osu|All types|*.*";
-            FileDialog.FileName = "";
-            FileDialog.CheckFileExists = true;
-            FileDialog.ValidateNames = true;
+            var FileDialog = new OpenFileDialog()
+            {
+                Filter = "osb file|*.osb|osu file|*.osu|All types|*.*",
+                FileName = "",
+                CheckFileExists = true,
+                ValidateNames = true
+            };
             if (FileDialog.ShowDialog() == DialogResult.OK)
             {
                 txtRoot.Text = FileDialog.FileName;
@@ -363,6 +401,7 @@ namespace LibOSB
         {
 
         }
+        public static int iii = 0;
         private void textBox1_LostFocus(object sender, EventArgs e)
         {
             int value;
@@ -372,8 +411,14 @@ namespace LibOSB
                 value = int.Parse(textBox1.Text);
                 if (value < 0 || value > 15)
                 {
-                    MessageBox.Show("Please enter a number between 0 and 15.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    var MessageBox = new frmConfirm(1);
                     textBox1.Focus();
+                    if (iii == 0)
+                    {
+                        iii++;
+                        MessageBox.ShowDialog();
+                    }
+                    //MessageBox.Show("Please enter a number between 0 and 15.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
                 Optimizer.Decimal = value;
@@ -381,8 +426,16 @@ namespace LibOSB
             }
             catch
             {
-                MessageBox.Show("Please enter a valid number.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //MessageBox.Show("Please enter a valid number.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                //textBox1.Focus();
+                var MessageBox = new frmConfirm(2);
                 textBox1.Focus();
+                if (iii == 0)
+                {
+                    iii++;
+                    MessageBox.ShowDialog();
+                }
+
             }
         }
 
@@ -446,8 +499,8 @@ namespace LibOSB
 
             WriteINI("RootSetting", "BackupFile", SControl.BackupRoot, iniroot);
 
-            WriteINI("InfoSetting", "CollectResult", InfoCollector.IfCollectInfo.ToString(), iniroot);
-            WriteINI("InfoSetting", "CollectException", InfoCollector.IfCollectEx.ToString(), iniroot);
+            //WriteINI("InfoSetting", "CollectResult", InfoCollector.IfCollectInfo.ToString(), iniroot);
+            //WriteINI("InfoSetting", "CollectException", InfoCollector.IfCollectEx.ToString(), iniroot);
         }
         private void GetSettings()
         {
@@ -468,8 +521,9 @@ namespace LibOSB
 
             chkinfo.Checked = bool.Parse(GetINI("InfoSetting", "CollectResult", "False", iniroot));
             chkex.Checked = bool.Parse(GetINI("InfoSetting", "CollectException", "True", iniroot));
-            InfoCollector.IfCollectInfo = chkinfo.Checked;
-            InfoCollector.IfCollectEx = chkex.Checked;
+
+            //InfoCollector.IfCollectInfo = chkinfo.Checked;
+            //InfoCollector.IfCollectEx = chkex.Checked;
 
 
             SControl.BackupRoot = GetINI("RootSetting", "BackupFile", "", iniroot);
@@ -500,10 +554,12 @@ namespace LibOSB
             catch (Exception ex)
             {
                 lbl_Line1.Text = ex.Message;
-                if (InfoCollector.IfCollectEx)
-                {
-                    try { InfoCollector.UploadEx(ex); } catch { }
-                }
+
+                //if (InfoCollector.IfCollectEx)
+                //{
+                //    try { InfoCollector.UploadEx(ex); } catch { }
+                //}
+
                 //MessageBox.Show(ex.Message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 //sControls.WriteFile(ex.Message, "Exception.log");
 
@@ -587,10 +643,11 @@ namespace LibOSB
                 richTextBox4.ForeColor = Color.FromArgb(255, 224, 224, 224);
                 richTextBox4.Text = Reporter.ToString(true);
                 lbl_Line1.Text = "Optimization finished.";
-                if (InfoCollector.IfCollectInfo)
-                {
-                    try { InfoCollector.UploadInfo(); } catch { }
-                }
+
+                //if (InfoCollector.IfCollectInfo)
+                //{
+                //    try { InfoCollector.UploadInfo(); } catch { }
+                //}
             }
 
             Reporter.Clear();
@@ -611,6 +668,7 @@ namespace LibOSB
             lbl_Line1.Text = "";
 
             before = ""; after = "";
+            richTextBox4.BackColor = Color.FromArgb(255, 55, 55, 55);
 
             wow.Start();
             Optimizer.Pause = false;
@@ -738,9 +796,15 @@ namespace LibOSB
             if (t1 != null && t1.IsAlive == true)
             {
                 //e.Cancel = true;
-                DialogResult ok = MessageBox.Show("Optimization is running, quit?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (ok == DialogResult.No) return;
+                var fm = new frmConfirm();
+                DialogResult ok = fm.ShowDialog();
+                if (ok == DialogResult.Cancel) return;
                 t1.Abort();
+                timerclose.Enabled = true;
+                return;
+                //DialogResult ok = MessageBox.Show("Optimization is running, quit?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                //if (ok == DialogResult.No) return;
+                //t1.Abort();
                 //timerclose.Enabled = true;
                 //return;
             }
@@ -843,14 +907,14 @@ namespace LibOSB
 
         private void chkinfo_Click(object sender, EventArgs e)
         {
-            InfoCollector.IfCollectInfo = chkinfo.Checked;
-            WriteSettings();
+            //InfoCollector.IfCollectInfo = chkinfo.Checked;
+            //WriteSettings();
         }
 
         private void chkex_Click(object sender, EventArgs e)
         {
-            InfoCollector.IfCollectEx = chkex.Checked;
-            WriteSettings();
+            //InfoCollector.IfCollectEx = chkex.Checked;
+            //WriteSettings();
         }
 
         private void chkinfo_CheckedChanged(object sender, EventArgs e)
@@ -907,13 +971,45 @@ namespace LibOSB
 
         private void button9_Click(object sender, EventArgs e)
         {
-            var fm = new frmAbout();
-            fm.ShowDialog();
+            if (button9.Text == "?")
+            {
+                var fm = new frmAbout();
+                fm.ShowDialog();
+            }
+            else if (button9.Text == "!")
+            {
+                button9.Text = "?";
+                button9.BackColor = Color.FromArgb(255, 64, 64, 64);
+                var fm = new frmUpdate();
+                fm.ShowDialog();
+            }
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+
+            //var frmInfo = new frmUpdate();
+            //frmInfo.ShowDialog();
             Process.Start("http://osu.ppy.sh/wiki/Storyboard_Variables");
+        }
+
+        private void DetectUpdate_Tick(object sender, EventArgs e)
+        {
+            var t2 = new Thread(CheckUpdate);
+            t2.Start();
+            //GetSettings();
+        }
+
+        private void timerColoring_Tick(object sender, EventArgs e)
+        {
+
+        }
+        int color = 0;
+        private void timerPlaying_Tick(object sender, EventArgs e)
+        {
+            int tmp = 55 + (int)(5 * Math.Sin(color / 10d));
+            richTextBox4.BackColor = Color.FromArgb(tmp, tmp, tmp);
+            color++;
         }
 
         private void ToStatus4()
