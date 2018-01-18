@@ -73,7 +73,7 @@ namespace LibOSB
             }
             else if (EndTime < StartTime)
             {
-                //throw new Exception("End time should be bigger than start time, or error will be occurs while playing.");
+                throw new Exception("End time should be bigger than start time, or error will be occurs while playing.");
             }
             if (@params != null)
             {
