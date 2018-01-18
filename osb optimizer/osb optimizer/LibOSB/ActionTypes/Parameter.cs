@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOSB.ActionTypes
 {
-    class Parameter : Actions
+    class Parameter : Action
     {
         public Parameter this[int index] { get => P[index]; }
 
@@ -16,7 +16,7 @@ namespace LibOSB.ActionTypes
             this.easing = easing;
             this.startTime = starttime;
             this.endTime = endtime;
-            this.ptype = ptype;
+            this.pType = ptype;
             indexL = i;
             indexT = j;
             BuildParams();
@@ -24,21 +24,21 @@ namespace LibOSB.ActionTypes
 
         private void BuildParams()
         {
-            @params = ptype;
+            @params = pType;
         }
 
         public Parameter() { }
 
         private List<Parameter> P = new List<Parameter>();
-        private string ptype;
-        public string Ptype { get => ptype; }
+        private string pType;
+        public string Ptype { get => pType; }
         public void Add(byte Easing, int StartTime, int EndTime,
          string PType)
         {
             if (Easing < 0 || Easing > 34) throw new Exception("Unknown Easing.");
             P.Add(new Parameter(Easing, StartTime, EndTime, PType, indexL, indexT));
-            starttime_L.Add(StartTime);
-            endtime_L.Add(EndTime);
+            startTime_L.Add(StartTime);
+            endTime_L.Add(EndTime);
         }
     }
 

@@ -8,7 +8,7 @@ namespace LibOSB
     /// <summary>
     /// Parent class of all actions. Should not be instantiated directly.
     /// </summary>
-    abstract class Actions
+    abstract class Action
     {
         protected StringBuilder sb = new StringBuilder();
 
@@ -21,16 +21,16 @@ namespace LibOSB
 
         protected string type;
 
-        public List<int?> starttime_L = new List<int?>();
-        public List<int?> endtime_L = new List<int?>();
+        public List<int?> startTime_L = new List<int?>();
+        public List<int?> endTime_L = new List<int?>();
 
         public void MoveEndTime(int index)
         {
-            endtime_L[index - 1] = endtime_L[index];
+            endTime_L[index - 1] = endTime_L[index];
         }
         public void MoveStartTime(int index)
         {
-            starttime_L[index - 1] = endtime_L[index - 1];
+            startTime_L[index - 1] = endTime_L[index - 1];
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace LibOSB
         /// <summary>
         /// Get number of one action.
         /// </summary>
-        public int Count { get => starttime_L.Count(); }
+        public int Count { get => startTime_L.Count(); }
 
         private int? tmpMaxTime;
         private int? tmpMinTime;
@@ -106,16 +106,16 @@ namespace LibOSB
             {
                 if (TmpMaxTime != null) return TmpMaxTime; //缓存
 
-                if (starttime_L.Count < 1) return null;
-                if (starttime_L.Max() > endtime_L.Max())
+                if (startTime_L.Count < 1) return null;
+                if (startTime_L.Max() > endTime_L.Max())
                 {
-                    TmpMaxTime = starttime_L.Max();
-                    return starttime_L.Max();
+                    TmpMaxTime = startTime_L.Max();
+                    return startTime_L.Max();
                 }
                 else
                 {
-                    TmpMaxTime = endtime_L.Max();
-                    return endtime_L.Max();
+                    TmpMaxTime = endTime_L.Max();
+                    return endTime_L.Max();
                 }
             }
         }
@@ -127,16 +127,16 @@ namespace LibOSB
             {
                 if (TmpMinTime != null) return TmpMinTime; //缓存
 
-                if (starttime_L.Count < 1) return null;
-                if (starttime_L.Min() < endtime_L.Min())
+                if (startTime_L.Count < 1) return null;
+                if (startTime_L.Min() < endTime_L.Min())
                 {
-                    TmpMinTime = starttime_L.Min();
-                    return starttime_L.Min();
+                    TmpMinTime = startTime_L.Min();
+                    return startTime_L.Min();
                 }
                 else
                 {
-                    TmpMinTime = endtime_L.Min();
-                    return endtime_L.Min();
+                    TmpMinTime = endTime_L.Min();
+                    return endTime_L.Min();
                 }
             }
         }

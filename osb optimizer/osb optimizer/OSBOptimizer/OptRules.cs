@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibOSB.ActionClass;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +8,13 @@ namespace LibOSB
 {
     partial class SBObject
     {
-        private static bool ifDeep = true;
+        private static bool isDeep = true;
 
-        public static bool IfDeep { get => ifDeep; set => ifDeep = value; }
+        public static bool IsDeep { get => isDeep; set => isDeep = value; }
 
         public void Optimize()
         {
-            if (Fade.Count > 0) optF(); if (unusefulObj) return;
+            if (Fade.Count > 0) HandleF(); if (unusefulObj) return;
             if (Move.Count > 0) optM();
             if (Scale.Count > 0) optS();
             if (Rotate.Count > 0) optR();
@@ -46,7 +47,7 @@ namespace LibOSB
         }
         private void optM()
         {
-            if (IfDeep)
+            if (IsDeep)
             {
                 //根据是否显示判定是否有效
                 int tmpindex = 0;
@@ -159,30 +160,28 @@ namespace LibOSB
                 }
             }
         }
-        private void optF()
+        private void HandleF()
         {
-            if (IfDeep)
+            if (IsDeep)
             {
                 int? tmpstart = null;
 
                 bool IsInFadeOut = false;
-                if (Fade[0].F1 == 0 && Fade[0].StartTime > MinTime())
+                if (Fade[0].ParamPre == 0 && Fade[0].StartTime > MinTime())
                 {
                     tmpstart = MinTime();
                     IsInFadeOut = true;
                 }
                 for (int j = 0; j < Fade.Count; j++)
                 {
-
-
-                    if ((Fade[j].F1 != 0 || Fade[j].F2 != 0 ||
-                        (Fade[j].EndTime == MaxTime() && Fade[j].F2 == 0)
+                    if ((Fade[j].ParamPre != 0 || Fade[j].ParamPost != 0 ||
+                        (Fade[j].EndTime == MaxTime() && Fade[j].ParamPost == 0)
                         ) && IsInFadeOut == true)
                     {
-                        Fade.FadeOutList.Add(new ActionTypes.FadeOutTime(tmpstart, Fade[j].StartTime));
+                        Fade.FadeOutList.Add(new FadeOutTime(tmpstart, Fade[j].StartTime));
                         IsInFadeOut = false;
                     }
-                    if (Fade[j].F2 == 0 && IsInFadeOut == false)
+                    if (Fade[j].ParamPost == 0 && IsInFadeOut == false)
                     {
                         tmpstart = Fade[j].EndTime;
                         IsInFadeOut = true;
@@ -190,11 +189,10 @@ namespace LibOSB
                 }
                 if (IsInFadeOut)
                 {
-                    Fade.FadeOutList.Add(new ActionTypes.FadeOutTime(tmpstart, MaxTime()));
-                    //IsInFadeOut = true;
+                    Fade.FadeOutList.Add(new FadeOutTime(tmpstart, MaxTime()));
                 }
             }
-            ///
+            
             int i = Fade.Count - 1;
             while (i >= 1)
             {
@@ -211,19 +209,19 @@ namespace LibOSB
                         (
                             (Fade[i].EndTime < this.MaxTime() || Fade[i].EndTime == max2 && if2max2 == true
                         )
-                        || Fade[i].F1 == 0 // ==============F特有。==============
+                        || Fade[i].ParamPre == 0 // ==============F特有。==============
                    ) &&
-                   Fade[i].F1 == Fade[i].F2 &&
-                   Fade[i].F1 == Fade[i - 1].F2)
+                   Fade[i].ParamPre == Fade[i].ParamPost &&
+                   Fade[i].ParamPre == Fade[i - 1].ParamPost)
                 {
                     Fade.Remove(i); Fade.ToNull(); ToNull();  //删除这个F
                     i = Fade.Count - 1;
                 }
                 /* 当 这个F与前面的F一致，又是单关键帧的，而且又不满足上面的（这里就是指小于最大时间的）
                  */
-                else if (Fade[i].F1 == Fade[i].F2 &&
-                  Fade[i - 1].F1 == Fade[i - 1].F2 &&
-                  Fade[i - 1].F1 == Fade[i].F1)
+                else if (Fade[i].ParamPre == Fade[i].ParamPost &&
+                  Fade[i - 1].ParamPre == Fade[i - 1].ParamPost &&
+                  Fade[i - 1].ParamPre == Fade[i].ParamPre)
                 {
                     Fade[i - 1].EndTime = Fade[i].EndTime; //整合到前面的
                     Fade.MoveEndTime(i);
@@ -240,7 +238,7 @@ namespace LibOSB
 
             // ==============F特有。==============
             if (Fade.Count == 1 &&
-                Fade[0].F1 == 0 && Fade[0].F2 == 0
+                Fade[0].ParamPre == 0 && Fade[0].ParamPost == 0
                 && Loop.Count == 0 && Trigger.Count == 0)
             {
                 unusefulObj = true;
@@ -261,8 +259,8 @@ namespace LibOSB
             if (Fade.Count == 1 &&
                 (Fade[0].EndTime < max || Fade[0].EndTime == max && if2max == true) &&
                 (Fade[0].StartTime > min || Fade[0].StartTime == min && if2min == true) &&
-                Fade[0].F1 == Fade[0].F2 &&
-                Fade[0].F1 == 1)
+                Fade[0].ParamPre == Fade[0].ParamPost &&
+                Fade[0].ParamPre == 1)
             {
                 Fade.Remove(0); Fade.ToNull(); ToNull();
             }
@@ -270,16 +268,16 @@ namespace LibOSB
             else if (Fade.Count > 1 &&
                 (Fade[0].EndTime < max || Fade[0].EndTime == max && if2max == true) &&
                 (Fade[0].StartTime > min || Fade[0].StartTime == min && if2min == true) &&
-                Fade[0].F1 == Fade[0].F2 &&
-                Fade[0].F2 == Fade[1].F1 &&
-                Fade[0].F1 == 1)
+                Fade[0].ParamPre == Fade[0].ParamPost &&
+                Fade[0].ParamPost == Fade[1].ParamPre &&
+                Fade[0].ParamPre == 1)
             {
                 Fade.Remove(0); Fade.ToNull(); ToNull();
             }
         }
         private void optS()
         {
-            if (IfDeep)
+            if (IsDeep)
             {     //根据是否显示判定是否有效
                 int tmpindex = 0;
                 for (int k = 0; k < Fade.FadeOutList.Count; k++)
@@ -322,17 +320,17 @@ namespace LibOSB
                  * 且 这个动作与上一个末动作一样     
                  */
                 if ((Scale[i].EndTime < this.MaxTime() || Scale[i].EndTime == max2 && if2max2 == true) &&
-                   Scale[i].S1 == Scale[i].S2 &&
-                   Scale[i].S1 == Scale[i - 1].S2)
+                   Scale[i].ParamPre == Scale[i].ParamPost &&
+                   Scale[i].ParamPre == Scale[i - 1].ParamPost)
                 {
                     Scale.Remove(i); Scale.ToNull(); ToNull();  //删除这个S
                     i = Scale.Count - 1;
                 }
                 /* 当 这个S与前面的S一致，又是单关键帧的，而且又不满足上面的（这里就是指小于最大时间的）
                  */
-                else if (Scale[i].S1 == Scale[i].S2 &&
-                  Scale[i - 1].S1 == Scale[i - 1].S2 &&
-                  Scale[i - 1].S1 == Scale[i].S1)
+                else if (Scale[i].ParamPre == Scale[i].ParamPost &&
+                  Scale[i - 1].ParamPre == Scale[i - 1].ParamPost &&
+                  Scale[i - 1].ParamPre == Scale[i].ParamPre)
                 {
 
                     Scale[i - 1].EndTime = Scale[i].EndTime; //整合到前面的
@@ -363,8 +361,8 @@ namespace LibOSB
             if (Scale.Count == 1 &&
                 (Scale[0].EndTime < max || Scale[0].EndTime == max && if2max == true) &&
                 (Scale[0].StartTime > min || Scale[0].StartTime == min && if2min == true) &&
-                Scale[0].S1 == Scale[0].S2 &&
-                Scale[0].S1 == 1)
+                Scale[0].ParamPre == Scale[0].ParamPost &&
+                Scale[0].ParamPre == 1)
             {
                 Scale.Remove(0); Scale.ToNull(); ToNull();
             }
@@ -372,16 +370,16 @@ namespace LibOSB
             else if (Scale.Count > 1 &&
                 (Scale[0].EndTime < max || Scale[0].EndTime == max && if2max == true) &&
                 (Scale[0].StartTime > min || Scale[0].StartTime == min && if2min == true) &&
-                Scale[0].S1 == Scale[0].S2 &&
-                Scale[0].S2 == Scale[1].S1 &&
-                Scale[0].S1 == 1)
+                Scale[0].ParamPre == Scale[0].ParamPost &&
+                Scale[0].ParamPost == Scale[1].ParamPre &&
+                Scale[0].ParamPre == 1)
             {
                 Scale.Remove(0); Scale.ToNull(); ToNull();
             }
         }
         private void optR()
         {
-            if (IfDeep)
+            if (IsDeep)
             {
                 //根据是否显示判定是否有效
                 int tmpindex = 0;
@@ -426,17 +424,17 @@ namespace LibOSB
                  */
                 if (
                    (Rotate[i].EndTime < this.MaxTime() || Rotate[i].EndTime == max2 && if2max2 == true) &&
-                   Rotate[i].R1 == Rotate[i].R2 &&
-                   Rotate[i].R1 == Rotate[i - 1].R2)
+                   Rotate[i].ParamPre == Rotate[i].ParamPost &&
+                   Rotate[i].ParamPre == Rotate[i - 1].ParamPost)
                 {
                     Rotate.Remove(i); Rotate.ToNull(); ToNull();  //删除这个R
                     i = Rotate.Count - 1;
                 }
                 /* 当 这个R与前面的R一致，又是单关键帧的，而且又不满足上面的（这里就是指小于最大时间的）
                  */
-                else if (Rotate[i].R1 == Rotate[i].R2 &&
-                  Rotate[i - 1].R1 == Rotate[i - 1].R2 &&
-                  Rotate[i - 1].R1 == Rotate[i].R1)
+                else if (Rotate[i].ParamPre == Rotate[i].ParamPost &&
+                  Rotate[i - 1].ParamPre == Rotate[i - 1].ParamPost &&
+                  Rotate[i - 1].ParamPre == Rotate[i].ParamPre)
                 {
 
                     Rotate[i - 1].EndTime = Rotate[i].EndTime; //整合到前面的
@@ -467,8 +465,8 @@ namespace LibOSB
             if (Rotate.Count == 1 &&
                 (Rotate[0].EndTime < max || Rotate[0].EndTime == max && if2max == true) &&
                 (Rotate[0].StartTime > min || Rotate[0].StartTime == min && if2min == true) &&
-                Rotate[0].R1 == Rotate[0].R2 &&
-                Rotate[0].R1 == 0)
+                Rotate[0].ParamPre == Rotate[0].ParamPost &&
+                Rotate[0].ParamPre == 0)
             {
                 Rotate.Remove(0); Rotate.ToNull(); ToNull();
             }
@@ -476,16 +474,16 @@ namespace LibOSB
             else if (Rotate.Count > 1 &&
                 (Rotate[0].EndTime < max || Rotate[0].EndTime == max && if2max == true) &&
                 (Rotate[0].StartTime > min || Rotate[0].StartTime == min && if2min == true) &&
-                Rotate[0].R1 == Rotate[0].R2 &&
-                Rotate[0].R2 == Rotate[1].R1 &&
-                Rotate[0].R1 == 0)
+                Rotate[0].ParamPre == Rotate[0].ParamPost &&
+                Rotate[0].ParamPost == Rotate[1].ParamPre &&
+                Rotate[0].ParamPre == 0)
             {
                 Rotate.Remove(0); Rotate.ToNull(); ToNull();
             }
         }
         private void optV()
         {
-            if (IfDeep)
+            if (IsDeep)
             {   //根据是否显示判定是否有效
                 int tmpindex = 0;
                 for (int k = 0; k < Fade.FadeOutList.Count; k++)
@@ -586,7 +584,7 @@ namespace LibOSB
         }
         private void optC()
         {
-            if (IfDeep)
+            if (IsDeep)
             {  //根据是否显示判定是否有效
                 int tmpindex = 0;
                 for (int k = 0; k < Fade.FadeOutList.Count; k++)
@@ -687,7 +685,7 @@ namespace LibOSB
         }
         private void optMX()
         {
-            if (IfDeep)
+            if (IsDeep)
             {    //根据是否显示判定是否有效
                 int tmpindex = 0;
                 for (int k = 0; k < Fade.FadeOutList.Count; k++)
@@ -730,17 +728,17 @@ namespace LibOSB
                  * 且 这个动作与上一个末动作一样     
                  */
                 if ((MoveX[i].EndTime < this.MaxTime() || MoveX[i].EndTime == max2 && if2max2 == true) &&
-                   MoveX[i].X1 == MoveX[i].X2 &&
-                   MoveX[i].X1 == MoveX[i - 1].X2)
+                   MoveX[i].ParamPre == MoveX[i].ParamPost &&
+                   MoveX[i].ParamPre == MoveX[i - 1].ParamPost)
                 {
                     MoveX.Remove(i); MoveX.ToNull(); ToNull();  //删除这个MX
                     i = MoveX.Count - 1;
                 }
                 /* 当 这个MX与前面的MX一致，又是单关键帧的，而且又不满足上面的（这里就是指小于最大时间的）
                  */
-                else if (MoveX[i].X1 == MoveX[i].X2 &&
-                  MoveX[i - 1].X1 == MoveX[i - 1].X2 &&
-                  MoveX[i - 1].X1 == MoveX[i].X1)
+                else if (MoveX[i].ParamPre == MoveX[i].ParamPost &&
+                  MoveX[i - 1].ParamPre == MoveX[i - 1].ParamPost &&
+                  MoveX[i - 1].ParamPre == MoveX[i].ParamPre)
                 {
 
                     MoveX[i - 1].EndTime = MoveX[i].EndTime; //整合到前面的
@@ -771,8 +769,8 @@ namespace LibOSB
             if (MoveX.Count == 1 &&
                 (MoveX[0].EndTime < max || MoveX[0].EndTime == max && if2max == true) &&
                 (MoveX[0].StartTime > min || MoveX[0].StartTime == min && if2min == true) &&
-                MoveX[0].X1 == MoveX[0].X2 &&
-                MoveX[0].X1 == X)
+                MoveX[0].ParamPre == MoveX[0].ParamPost &&
+                MoveX[0].ParamPre == X)
             {
                 MoveX.Remove(0); MoveX.ToNull(); ToNull();
             }
@@ -780,16 +778,16 @@ namespace LibOSB
             else if (MoveX.Count > 1 &&
                 (MoveX[0].EndTime < max || MoveX[0].EndTime == max && if2max == true) &&
                 (MoveX[0].StartTime > min || MoveX[0].StartTime == min && if2min == true) &&
-                MoveX[0].X1 == MoveX[0].X2 &&
-                MoveX[0].X2 == MoveX[1].X1 &&
-                MoveX[0].X1 == X)
+                MoveX[0].ParamPre == MoveX[0].ParamPost &&
+                MoveX[0].ParamPost == MoveX[1].ParamPre &&
+                MoveX[0].ParamPre == X)
             {
                 MoveX.Remove(0); MoveX.ToNull(); ToNull();
             }
         }
         private void optMY()
         {
-            if (IfDeep)
+            if (IsDeep)
             {   //根据是否显示判定是否有效
                 int tmpindex = 0;
                 for (int k = 0; k < Fade.FadeOutList.Count; k++)
@@ -832,17 +830,17 @@ namespace LibOSB
                  * 且 这个动作与上一个末动作一样     
                  */
                 if ((MoveY[i].EndTime < this.MaxTime() || MoveY[i].EndTime == max2 && if2max2 == true) &&
-                   MoveY[i].Y1 == MoveY[i].Y2 &&
-                   MoveY[i].Y1 == MoveY[i - 1].Y2)
+                   MoveY[i].ParamPre == MoveY[i].ParamPost &&
+                   MoveY[i].ParamPre == MoveY[i - 1].ParamPost)
                 {
                     MoveY.Remove(i); MoveY.ToNull(); ToNull();  //删除这个MY
                     i = MoveY.Count - 1;
                 }
                 /* 当 这个MY与前面的MY一致，又是单关键帧的，而且又不满足上面的（这里就是指小于最大时间的）
                  */
-                else if (MoveY[i].Y1 == MoveY[i].Y2 &&
-                  MoveY[i - 1].Y1 == MoveY[i - 1].Y2 &&
-                  MoveY[i - 1].Y1 == MoveY[i].Y1)
+                else if (MoveY[i].ParamPre == MoveY[i].ParamPost &&
+                  MoveY[i - 1].ParamPre == MoveY[i - 1].ParamPost &&
+                  MoveY[i - 1].ParamPre == MoveY[i].ParamPre)
                 {
 
                     MoveY[i - 1].EndTime = MoveY[i].EndTime; //整合到前面的
@@ -873,8 +871,8 @@ namespace LibOSB
             if (MoveY.Count == 1 &&
                 (MoveY[0].EndTime < max || MoveY[0].EndTime == max && if2max == true) &&
                 (MoveY[0].StartTime > min || MoveY[0].StartTime == min && if2min == true) &&
-                MoveY[0].Y1 == MoveY[0].Y2 &&
-                MoveY[0].Y1 == Y)
+                MoveY[0].ParamPre == MoveY[0].ParamPost &&
+                MoveY[0].ParamPre == Y)
             {
                 MoveY.Remove(0); MoveY.ToNull(); ToNull();
             }
@@ -882,9 +880,9 @@ namespace LibOSB
             else if (MoveY.Count > 1 &&
                 (MoveY[0].EndTime < max || MoveY[0].EndTime == max && if2max == true) &&
                 (MoveY[0].StartTime > min || MoveY[0].StartTime == min && if2min == true) &&
-                MoveY[0].Y1 == MoveY[0].Y2 &&
-                MoveY[0].Y2 == MoveY[1].Y1 &&
-                MoveY[0].Y1 == Y)
+                MoveY[0].ParamPre == MoveY[0].ParamPost &&
+                MoveY[0].ParamPost == MoveY[1].ParamPre &&
+                MoveY[0].ParamPre == Y)
             {
                 MoveY.Remove(0); MoveY.ToNull(); ToNull();
             }

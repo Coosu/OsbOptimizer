@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOSB.ActionTypes
 {
-    class Move : Actions
+    class Move : Action
     {
         /// <summary>
         /// 访问已存储的Move元素。
@@ -19,8 +19,8 @@ namespace LibOSB.ActionTypes
         public void Remove(int index)
         {
             M.Remove(M[index]);
-            starttime_L.RemoveAt(index);
-            endtime_L.RemoveAt(index);
+            startTime_L.RemoveAt(index);
+            endTime_L.RemoveAt(index);
         }
 
         public Move(byte easing, int starttime, int endtime,
@@ -84,8 +84,8 @@ namespace LibOSB.ActionTypes
 
             //checkTwoMinMax(StartTime, EndTime);
 
-            starttime_L.Add(StartTime);
-            endtime_L.Add(EndTime);
+            startTime_L.Add(StartTime);
+            endTime_L.Add(EndTime);
         }
     }
 }
