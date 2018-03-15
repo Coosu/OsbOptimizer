@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOSB.ActionTypes
 {
-    class Trigger : Action
+    class Trigger : Actions
     {
         public Trigger this[int index]
         {
@@ -68,8 +68,8 @@ namespace LibOSB.ActionTypes
         {
             int Lindex = T.Count;
             T.Add(new Trigger(TriggerType, StartTime, EndTime, Lindex));
-            startTime_L.Add(StartTime);
-            endTime_L.Add(EndTime);
+            starttime_L.Add(StartTime);
+            endtime_L.Add(EndTime);
         }
         private List<int?> max = new List<int?>();
         private List<int?> min = new List<int?>();

@@ -265,12 +265,12 @@ namespace LibOSB
             richTextBox3.Select(0, 0);
             richTextBox4.Select(0, 0);
         }
-        int firstCheck = 0;
+        int firstcheck = 0;
         private void CheckUpdate()
         {
             try
             {
-                Client.StartListen(firstCheck);
+                Client.StartListen(firstcheck);
                 var timer = new Stopwatch();
                 timer.Start();
                 while (Client.UpdateInfo == null && !Client.IsFailed)
@@ -297,7 +297,7 @@ namespace LibOSB
             {
                 //lbl_Line1.Text = ex.Message;
             }
-            firstCheck++;
+            firstcheck++;
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -517,7 +517,7 @@ namespace LibOSB
             chkvar.Checked = bool.Parse(GetINI("OptimizationSettings", "VariableSubstitutions", "False", iniroot));
             Optimizer.ifCheck = chkchk.Checked;
             Optimizer.ifVar = chkvar.Checked;
-            SBObject.IsDeep = chkDeep.Checked;
+            SBObject.IfDeep = chkDeep.Checked;
 
             chkinfo.Checked = bool.Parse(GetINI("InfoSetting", "CollectResult", "False", iniroot));
             chkex.Checked = bool.Parse(GetINI("InfoSetting", "CollectException", "True", iniroot));
@@ -951,7 +951,7 @@ namespace LibOSB
 
         private void chkDeep_CheckedChanged(object sender, EventArgs e)
         {
-            SBObject.IsDeep = chkDeep.Checked;
+            SBObject.IfDeep = chkDeep.Checked;
         }
 
         private void chkDeep_Click(object sender, EventArgs e)

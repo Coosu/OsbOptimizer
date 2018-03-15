@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOSB.ActionTypes
 {
-    class Loop : Action
+    class Loop : Actions
     {
         public Loop this[int index]
         {
@@ -65,7 +65,7 @@ namespace LibOSB.ActionTypes
         {
             int Lindex = L.Count;
             L.Add(new Loop(StartTime, Times, Lindex));
-            startTime_L.Add(StartTime);
+            starttime_L.Add(StartTime);
         }
         private List<int?> max = new List<int?>();
         private List<int?> min = new List<int?>();

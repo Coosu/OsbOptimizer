@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOSB.ActionTypes
 {
-    class Vector : Action
+    class Vector : Actions
     {
 
         public Vector this[int index] { get => V[index]; }
@@ -14,8 +14,8 @@ namespace LibOSB.ActionTypes
         public void Remove(int index)
         {
             V.Remove(V[index]);
-            startTime_L.RemoveAt(index);
-            endTime_L.RemoveAt(index);
+            starttime_L.RemoveAt(index);
+            endtime_L.RemoveAt(index);
         }
         public Vector(byte easing, int starttime, int endtime,
          double VX1, double VY1, double VX2, double VY2, int? i, int? j)
@@ -53,8 +53,8 @@ namespace LibOSB.ActionTypes
         {
             if (Easing < 0 || Easing > 34) throw new Exception("Unknown Easing.");
             V.Add(new Vector(Easing, StartTime, EndTime, Vector_X1, Vector_Y1, Vector_X2, Vector_Y2, indexL, indexT));
-            startTime_L.Add(StartTime);
-            endTime_L.Add(EndTime);
+            starttime_L.Add(StartTime);
+            endtime_L.Add(EndTime);
         }
 
     }

@@ -75,11 +75,7 @@
     <Compile Include="frmInfo.Designer.cs">
       <DependentUpon>frmInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="LibOSB\Action.cs" />
-    <Compile Include="LibOSB\ActionClass\ActionDouble.cs" />
-    <Compile Include="LibOSB\ActionClass\ActionSingle.cs" />
-    <Compile Include="LibOSB\ActionClass\ActionTriple.cs" />
-    <Compile Include="LibOSB\ActionClass\FadeOutTime.cs" />
+    <Compile Include="LibOSB\Actions.cs" />
     <Compile Include="LibOSB\ActionTypes\Color.cs" />
     <Compile Include="LibOSB\ActionTypes\Fade.cs" />
     <Compile Include="LibOSB\ActionTypes\Loop.cs" />
@@ -154,7 +150,6 @@
   <ItemGroup>
     <None Include="Resources\gear.ico" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

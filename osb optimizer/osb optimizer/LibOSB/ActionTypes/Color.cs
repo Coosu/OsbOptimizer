@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOSB.ActionTypes
 {
-    class Color : Action
+    class Color : Actions
     {
         public Color this[int index] { get => C[index]; }
 
@@ -37,8 +37,8 @@ namespace LibOSB.ActionTypes
         public void Remove(int index)
         {
             C.Remove(C[index]);
-            startTime_L.RemoveAt(index);
-            endTime_L.RemoveAt(index);
+            starttime_L.RemoveAt(index);
+            endtime_L.RemoveAt(index);
         }
 
         public List<Color> C = new List<Color>();
@@ -57,8 +57,8 @@ namespace LibOSB.ActionTypes
         {
             if (Easing < 0 || Easing > 34) throw new Exception("Unknown Easing.");
             C.Add(new Color(Easing, StartTime, EndTime, R1, G1, B1, R2, G2, B2, indexL, indexT));
-            startTime_L.Add(StartTime);
-            endTime_L.Add(EndTime);
+            starttime_L.Add(StartTime);
+            endtime_L.Add(EndTime);
         }
 
     }

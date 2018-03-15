@@ -16,14 +16,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.Move.Count != 0)
             {
 
-                List<int?> tmpstart = sb.Move.startTime_L.ToList();
+                List<int?> tmpstart = sb.Move.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.Move.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.Move.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.Move.startTime_L.ToArray();
-                    end = sb.Move.endTime_L.ToArray();
+                    start = sb.Move.starttime_L.ToArray();
+                    end = sb.Move.endtime_L.ToArray();
                     var line = sb.Move.M.ToArray();
                     Sort(start, end, line);
 
@@ -39,14 +39,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.Fade.Count != 0)
             {
 
-                List<int?> tmpstart = sb.Fade.startTime_L.ToList();
+                List<int?> tmpstart = sb.Fade.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.Fade.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.Fade.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.Fade.startTime_L.ToArray();
-                    end = sb.Fade.endTime_L.ToArray();
+                    start = sb.Fade.starttime_L.ToArray();
+                    end = sb.Fade.endtime_L.ToArray();
                     var line = sb.Fade.F.ToArray();
                     Sort(start, end, line);
 
@@ -62,14 +62,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.Scale.Count != 0)
             {
 
-                List<int?> tmpstart = sb.Scale.startTime_L.ToList();
+                List<int?> tmpstart = sb.Scale.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.Scale.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.Scale.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.Scale.startTime_L.ToArray();
-                    end = sb.Scale.endTime_L.ToArray();
+                    start = sb.Scale.starttime_L.ToArray();
+                    end = sb.Scale.endtime_L.ToArray();
                     var line = sb.Scale.S.ToArray();
                     Sort(start, end, line);
 
@@ -85,14 +85,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.Rotate.Count != 0)
             {
 
-                List<int?> tmpstart = sb.Rotate.startTime_L.ToList();
+                List<int?> tmpstart = sb.Rotate.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.Rotate.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.Rotate.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.Rotate.startTime_L.ToArray();
-                    end = sb.Rotate.endTime_L.ToArray();
+                    start = sb.Rotate.starttime_L.ToArray();
+                    end = sb.Rotate.endtime_L.ToArray();
                     var line = sb.Rotate.R.ToArray();
                     Sort(start, end, line);
 
@@ -108,14 +108,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.Color.Count != 0)
             {
 
-                List<int?> tmpstart = sb.Color.startTime_L.ToList();
+                List<int?> tmpstart = sb.Color.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.Color.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.Color.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.Color.startTime_L.ToArray();
-                    end = sb.Color.endTime_L.ToArray();
+                    start = sb.Color.starttime_L.ToArray();
+                    end = sb.Color.endtime_L.ToArray();
                     var line = sb.Color.C.ToArray();
                     Sort(start, end, line);
 
@@ -131,14 +131,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.MoveX.Count != 0)
             {
 
-                List<int?> tmpstart = sb.MoveX.startTime_L.ToList();
+                List<int?> tmpstart = sb.MoveX.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.MoveX.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.MoveX.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.MoveX.startTime_L.ToArray();
-                    end = sb.MoveX.endTime_L.ToArray();
+                    start = sb.MoveX.starttime_L.ToArray();
+                    end = sb.MoveX.endtime_L.ToArray();
                     var line = sb.MoveX.MX.ToArray();
                     Sort(start, end, line);
 
@@ -154,14 +154,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.MoveY.Count != 0)
             {
 
-                List<int?> tmpstart = sb.MoveY.startTime_L.ToList();
+                List<int?> tmpstart = sb.MoveY.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.MoveY.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.MoveY.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.MoveY.startTime_L.ToArray();
-                    end = sb.MoveY.endTime_L.ToArray();
+                    start = sb.MoveY.starttime_L.ToArray();
+                    end = sb.MoveY.endtime_L.ToArray();
                     var line = sb.MoveY.MY.ToArray();
                     Sort(start, end, line);
 
@@ -177,14 +177,14 @@ namespace OsuStoryboard.OSBOptimizer
             if (sb.Vector.Count != 0)
             {
 
-                List<int?> tmpstart = sb.Vector.startTime_L.ToList();
+                List<int?> tmpstart = sb.Vector.starttime_L.ToList();
                 tmpstart.Sort();
 
-                if (IsEqual(tmpstart, sb.Vector.startTime_L)) tmpstart = null;
+                if (IsEqual(tmpstart, sb.Vector.starttime_L)) tmpstart = null;
                 else
                 {
-                    start = sb.Vector.startTime_L.ToArray();
-                    end = sb.Vector.endTime_L.ToArray();
+                    start = sb.Vector.starttime_L.ToArray();
+                    end = sb.Vector.endtime_L.ToArray();
                     var line = sb.Vector.V.ToArray();
                     Sort(start, end, line);
 
